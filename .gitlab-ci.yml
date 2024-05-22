@@ -1,0 +1,16 @@
+test:
+  image: alpine:latest
+  stage: test
+  script:
+    - apk add bash git
+    - bash ./test/test.sh
+
+deploy:
+  image: node:current
+  variables:
+    CLOUDFLARE_API_TOKEN: $CLOUDFLARE_API_TOKEN
+    CLOUDFLARE_ACCOUNT_ID: $CLOUDFLARE_ACCOUNT_ID
+  stage: deploy
+  script:
+    - npm install -g wrangler --unsafe-perm=true
+    - wrangler pages deploy --branch=production
