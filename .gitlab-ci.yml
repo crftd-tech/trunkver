@@ -1,9 +1,9 @@
 test:
-  image: alpine:latest
+  image: golang:1.22.3
   stage: test
   script:
-    - apk add bash git
-    - bash ./test/test.sh
+    - go install
+    - go test -v
 
 deploy:
   image: node:current
