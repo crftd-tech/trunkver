@@ -26,8 +26,6 @@ jobs:
         with:
           images: ghcr.io/crftd-tech/trunkver
           tags: |
-            type=semver,pattern={{version}},value=${{ steps.trunkver.outputs.trunkver }}
-            type=semver,pattern={{major}},value=${{ steps.trunkver.outputs.trunkver }}
             type=raw,value=${{ steps.trunkver.outputs.trunkver }}
             type=raw,value=latest
 

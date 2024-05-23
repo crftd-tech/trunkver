@@ -1,4 +1,4 @@
-module gitlab.com/crftd-tech/trunkver.org/trunkver
+module github.com/crftd-tech/trunkver
 
 go 1.22
 
