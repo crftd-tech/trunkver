@@ -20,16 +20,28 @@ jobs:
         id: trunkver
         uses: crftd-tech/trunkver@main
 
+      - name: Generate metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/crftd-tech/trunkver
+          tags: |
+            type=semver,pattern={{version}},value=${{ steps.trunkver.outputs.trunkver }}
+            type=semver,pattern={{major}},value=${{ steps.trunkver.outputs.trunkver }}
+            type=raw,value=${{ steps.trunkver.outputs.trunkver }}
+            type=raw,value=latest
+
       - name: Log in to the Container registry
         uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
         with:
           registry: "ghcr.io"
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      
+
       - name: Build and push Docker image
         uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
         with:
           context: .
           push: true
-          tags: "ghcr.io/crftd-tech/trunkver:latest,ghcr.io/crftd-tech/trunkver:${{ steps.trunkver.outputs.trunkver }}"
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
