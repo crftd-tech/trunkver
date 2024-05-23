@@ -10,4 +10,7 @@ jobs:
 
     steps:
       - name: Run another action
+        id: trunkver
         uses: crftd-tech/trunkver@main
+      - name: Print trunkver
+        run: echo "The trunkver is ${{ steps.trunkver.outputs.trunkver }}"

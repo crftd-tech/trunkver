@@ -4,9 +4,15 @@ author: crftd.tech
 
 outputs:
   trunkver:
-    description: The trunkver 
+    description: The trunkver
 
 runs:
   using: docker
-  image: docker://ghcr.io/crftd/trunkver:latest
-  entrypoint: "/bin/sh -c 'echo trunkver=$(trunkver) | tee $GITHUB_OUTPUT'"
+  image: docker://ghcr.io/crftd-tech/trunkver:latest
+  entrypoint: /bin/sh
+  args:
+    - -eu
+    - -o
+    - pipefail
+    - -c
+    - echo trunkver=$(/trunkver) | tee $GITHUB_OUTPUT
