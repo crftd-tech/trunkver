@@ -16,6 +16,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Generate trunkver
+        id: trunkver
+        uses: crftd-tech/trunkver@main
+
       - name: Log in to the Container registry
         uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
         with:
@@ -28,4 +32,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: "ghcr.io/crftd-tech/trunkver:latest"
+          tags: "ghcr.io/crftd-tech/trunkver:latest,ghcr.io/crftd-tech/trunkver:${{ steps.trunkver.outputs.trunkver }}"
