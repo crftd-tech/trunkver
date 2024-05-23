@@ -1,0 +1,13 @@
+name: Test Workflow
+
+on:
+  workflow_dispatch:
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Run another action
+        uses: rradczewski/gh-action-env-test@main
