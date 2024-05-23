@@ -10,4 +10,4 @@ jobs:
 
     steps:
       - name: Run another action
-        uses: rradczewski/gh-action-env-test@main
+        uses: crftd-tech/trunkver@main

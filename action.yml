@@ -1,0 +1,12 @@
+name: trunkver
+description: Create a trunkver for this github action run
+author: crftd.tech
+
+outputs:
+  trunkver:
+    description: The trunkver 
+
+runs:
+  using: docker
+  image: docker://ghcr.io/crftd/trunkver:latest
+  entrypoint: "/bin/sh -c 'echo trunkver=$(trunkver) | tee $GITHUB_OUTPUT'"
