@@ -1,12 +1,16 @@
 name: Build and Push
 
 on:
+  workflow_dispatch:
   push:
+    paths-ignore:
+      - 'action.yml'
     branches:
       - main
 
 permissions:
   packages: write
+  contents: write
 
 jobs:
   build:
@@ -43,3 +47,13 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Update the action.yml with the new image tag
+        run: |
+          yq eval --inplace '.runs.image = "docker://ghcr.io/crftd-tech/trunkver:${{ steps.trunkver.outputs.trunkver }}"' action.yml
+          git config --global user.email "bot@crftd.tech"
+          git config --global user.name "crftd-bot"
+          git add action.yml
+          git commit -m "chore: Bump image tag in action.yml"
+          git push
+          
