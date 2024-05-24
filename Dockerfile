@@ -1,4 +1,5 @@
 FROM golang:1.22 AS builder
+ARG VERSION=0.0.0-HEAD-local
 
 WORKDIR /app
 
@@ -9,7 +10,7 @@ COPY *.go ./
 COPY internal internal
 
 RUN go test -v
-RUN go build -o trunkver
+RUN go build -o trunkver -ldflags "-X main.Version=${VERSION}"
 
 FROM debian AS smoke
 

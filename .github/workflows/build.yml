@@ -35,7 +35,9 @@ jobs:
         with:
           go-version: 1.22
       - name: Build trunkver
-        run: go build -o trunkver_linux_amd64
+        env:
+          VERSION: ${{ needs.generate-version.outputs.trunkver }}
+        run: go build -o trunkver_linux_amd64 -ldflags "-X main.Version=${VERSION}"
       - name: Create empty release
         id: release
         uses: softprops/action-gh-release@v1
@@ -71,6 +73,8 @@ jobs:
         with:
           context: .
           push: true
+          build-args: |
+            VERSION=${{ needs.generate-version.outputs.trunkver }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
       - name: Update the action.yml with the new image tag
