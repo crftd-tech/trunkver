@@ -1,0 +1,8 @@
+{
+  "name": "Go",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": "."
+  },
+  "onCreateCommand": "go get && go mod download"
+}

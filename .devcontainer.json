@@ -1,5 +1,0 @@
-{
-  "name": "Go",
-  "image": "mcr.microsoft.com/devcontainers/go:1.22",
-  "onCreateCommand": "go get && go mod download"
-}
