@@ -15,7 +15,7 @@ tests:
 
   - name: ci/github
     command: |
-      export GITHUB_SHA=1234567
+      export GITHUB_SHA=1234567890abcdef1234567890abcdef12345678
       export GITHUB_RUN_ID=R4242
       trunkver --timestamp "2024-05-22T16:25:48+02:00" 
     stdout: |
@@ -24,8 +24,17 @@ tests:
   - name: ci/gitlab
     command: |
       export GITLAB_CI=true
-      export CI_COMMIT_SHA=1234567
+      export CI_COMMIT_SHA=1234567890abcdef1234567890abcdef12345678
       export CI_JOB_ID=R4242
+      trunkver --timestamp "2024-05-22T16:25:48+02:00" 
+    stdout: |
+      20240522142548.0.0-g1234567-R4242
+
+  - name: ci/circleci
+    command: |
+      export CIRCLECI=true
+      export CIRCLE_SHA1=1234567890abcdef1234567890abcdef12345678
+      export CIRCLE_WORKFLOW_JOB_ID=R4242
       trunkver --timestamp "2024-05-22T16:25:48+02:00" 
     stdout: |
       20240522142548.0.0-g1234567-R4242
