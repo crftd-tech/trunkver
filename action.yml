@@ -6,7 +6,7 @@ outputs:
     description: The trunkver
 runs:
   using: docker
-  image: docker://ghcr.io/crftd-tech/trunkver:20240524223428.0.0-g4932de9-9230665900
+  image: docker://ghcr.io/crftd-tech/trunkver:20240524230422.0.0-g6837e5f-9230853766
   entrypoint: /bin/sh
   args:
     - -eu
