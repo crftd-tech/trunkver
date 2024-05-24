@@ -6,10 +6,12 @@ import (
 	"io"
 	"os"
 	"time"
+
+	"github.com/crftd-tech/trunkver/internal/ci"
 )
 
 func formatTrunkver(ts time.Time, sourceRef, buildRef string) string {
-	return ts.UTC().Format("20060102150405") + ".0.0-g" + sourceRef + "-" + buildRef
+	return ts.UTC().Format("20060102150405") + ".0.0-" + sourceRef + "-" + buildRef
 }
 
 func main() {
@@ -23,6 +25,17 @@ func run(w io.Writer, args []string) {
 	bRed := flagSet.String("build-ref", "", "The build ref to use for the version")
 
 	flagSet.Parse(args[1:])
+
+	ciResult, found := ci.DetectCi()
+	if found {
+		ciData := ciResult.Get()
+		if *sRef == "" {
+			*sRef = ciData.SourceRef
+		}
+		if *bRed == "" {
+			*bRed = ciData.BuildRef
+		}
+	}
 
 	var parsedTime time.Time
 	if *ts == "now" {

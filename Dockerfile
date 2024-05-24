@@ -6,6 +6,7 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 COPY *.go ./
+COPY internal internal
 
 RUN go test -v
 RUN go build -o trunkver

@@ -16,7 +16,7 @@ func TestApplicationVersion(t *testing.T) {
 	}
 	assert.Equal(t,
 		"20240522142548.0.0-gb4dc0d3-12345",
-		formatTrunkver(now, "b4dc0d3", "12345"),
+		formatTrunkver(now, "gb4dc0d3", "12345"),
 		"Should create a semver-compatible version",
 	)
 }
@@ -25,7 +25,7 @@ func TestPassAllExplicitArgs(t *testing.T) {
 	args := []string{
 		"trunkver",
 		"--timestamp", "2024-05-22T16:25:48+02:00",
-		"--source-ref", "b4dc0d3",
+		"--source-ref", "gb4dc0d3",
 		"--build-ref", "12345",
 	}
 	r, w, _ := os.Pipe()
