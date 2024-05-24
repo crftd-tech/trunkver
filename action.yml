@@ -1,14 +1,12 @@
 name: trunkver
 description: Create a trunkver for this github action run
 author: crftd.tech
-
 outputs:
   trunkver:
     description: The trunkver
-
 runs:
   using: docker
-  image: docker://ghcr.io/crftd-tech/trunkver:latest
+  image: docker://ghcr.io/crftd-tech/trunkver:20240524223428.0.0-g4932de9-9230665900
   entrypoint: /bin/sh
   args:
     - -eu
