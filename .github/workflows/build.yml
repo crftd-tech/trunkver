@@ -65,6 +65,7 @@ jobs:
           images: ghcr.io/crftd-tech/trunkver
           tags: |
             type=raw,value=${{ needs.generate-version.outputs.trunkver }}
+            type=raw,value=latest
 
       - name: Log in to the Container registry
         uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
