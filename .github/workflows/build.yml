@@ -23,6 +23,9 @@ jobs:
       - name: Generate trunkver
         id: trunkver
         uses: crftd-tech/trunkver@main
+        with:
+          baseVersion: "1.0.0"
+          prerelease: "true"
 
   build-release:
     runs-on: ubuntu-latest
