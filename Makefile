@@ -21,7 +21,7 @@ all: $(addprefix out/trunkver_, $(PLATFORMS))
 $(addprefix out/trunkver_, $(PLATFORMS)): out
 	GOOS=$(word 2,$(subst _, ,$@)) \
 	  GOARCH=$(word 3,$(subst _, ,$@)) \
-	  go build -ldflags "-X main.Version=$(VERSION)" -o $@ ./cmd/trunkver.go
+	  go build -ldflags "-X main.Version=$(VERSION)" -o $@ ./main.go
 
 out/smoke: out
 	curl -sL https://github.com/SamirTalwar/smoke/releases/download/v2.4.0/smoke-v2.4.0-Linux-x86_64 -o $@

@@ -1,80 +1,83 @@
-package main
+package cmd
 
 import (
-	"flag"
 	"fmt"
-	"io"
 	"os"
 	"time"
 
 	"github.com/crftd-tech/trunkver/internal/ci"
 	"github.com/crftd-tech/trunkver/internal/trunkver"
+	"github.com/spf13/cobra"
 )
 
-var Version string = "0.0.0-HEAD-local"
+var Version string = "UNDEFINED"
 
-func main() {
-	run(os.Stdout, os.Stderr, os.Args)
+func Execute() {
+	var rootCmd = &cobra.Command{
+		Version: Version,
+		Use:     "trunkver [flags] [base-version]",
+		Short:   "trunkver generates versions for trunk-based apps",
+		Args:    cobra.MaximumNArgs(1),
+		Run:     run,
+	}
+
+	rootCmd.SetVersionTemplate("{{.Version}}\n")
+	rootCmd.Flags().StringP("build-ref", "b", "", "The build ref to use (e.g. $GITHUB_RUN_ID)")
+	rootCmd.Flags().StringP("source-ref", "s", "", "The source ref to use for the version (e.g. \"g$(git rev-parse --short HEAD)\")")
+	rootCmd.Flags().StringP("timestamp", "t", "now", "The timestamp to use for the version in RFC3339 format")
+	rootCmd.Flags().BoolP("prerelease", "p", false, "Build the trunkver as the prerelease part of a semver (e.g. for nightly builds)")
+
+	rootCmd.Execute()
 }
 
-func run(out io.Writer, err io.Writer, args []string) {
-	flagSet := flag.NewFlagSet("trunkver", flag.ExitOnError)
-	version := flagSet.Bool("version", false, "Print the version and exit")
-	ts := flagSet.String("timestamp", "now", "The timestamp to use for the version in RFC3339 format")
-	sRef := flagSet.String("source-ref", "", "The source ref to use for the version")
-	bRef := flagSet.String("build-ref", "", "The build ref to use for the version")
-	prereleaseOnly := flagSet.Bool("prerelease", false, "Build the trunkver as the prerelease part of a version (e.g. for nightly builds)")
-
-	flagSet.Parse(args[1:])
-	baseVersion := flagSet.Arg(0)
-
-	if *version {
-		fmt.Fprintln(err, Version)
-		return
-	}
+func run(cmd *cobra.Command, args []string) {
+	var buildRef string = cmd.Flags().Lookup("build-ref").Value.String()
+	var sourceRef string = cmd.Flags().Lookup("source-ref").Value.String()
+	var timestamp string = cmd.Flags().Lookup("timestamp").Value.String()
+	var prerelease bool = cmd.Flags().Lookup("prerelease").Value.String() == "true"
 
 	ciResult, found := ci.DetectCi()
 	if found {
 		ciData := ciResult.Get()
-		if *sRef == "" {
-			*sRef = ciData.SourceRef
+		if sourceRef == "" {
+			sourceRef = ciData.SourceRef
 		}
-		if *bRef == "" {
-			*bRef = ciData.BuildRef
+		if buildRef == "" {
+			buildRef = ciData.BuildRef
 		}
 	}
 
-	if *bRef == "" {
-		fmt.Fprintln(err, "Error: --build-ref missing, your CI might be unsupported. Specify it manually. It should identify the log that was produced during creation of this artifact, e.g. the Job Id in Github Actions")
+	if buildRef == "" {
+		fmt.Fprintln(os.Stderr, "Error: --build-ref missing, your CI might be unsupported. It should identify the log that was produced during creation of this artifact, e.g. the Job Id in Github Actions")
 		os.Exit(1)
 	}
 
-	if *sRef == "" {
-		fmt.Fprintln(err, "Error: --source-ref missing, your CI might be unsupported. Specify it manually. It should identify the commit that was used to build this artifact, e.g. \"g${GITHUB_SHA:0:7}\" or \"g$(git rev-parse --short HEAD)\".")
+	if sourceRef == "" {
+		fmt.Fprintln(os.Stderr, "Error: --source-ref missing, your CI might be unsupported. It should identify the commit that was used to build this artifact, e.g. \"g${GITHUB_SHA:0:7}\" or \"g$(git rev-parse --short HEAD)\".")
 		os.Exit(1)
 	}
 
 	var parsedTime time.Time
-	if *ts == "now" {
+	if timestamp == "now" {
 		parsedTime = time.Now()
 	} else {
 		var err error
-		parsedTime, err = time.Parse(time.RFC3339, *ts)
+		parsedTime, err = time.Parse(time.RFC3339, timestamp)
 		if err != nil {
 			panic(err)
 		}
 	}
 
-	if !*prereleaseOnly {
-		fmt.Fprintln(out, trunkver.FormatMajorTrunkver(parsedTime, *sRef, *bRef))
+	if !prerelease {
+		fmt.Fprintln(os.Stdout, trunkver.FormatMajorTrunkver(parsedTime, sourceRef, buildRef))
 		return
 	}
 
-	var trunkVer string = trunkver.FormatPrereleaseTrunkver(parsedTime, *sRef, *bRef)
-	if baseVersion == "" {
-		fmt.Fprintln(out, trunkVer)
+	var trunkVer string = trunkver.FormatPrereleaseTrunkver(parsedTime, sourceRef, buildRef)
+	if len(args) == 0 || args[0] == "" {
+		fmt.Fprintln(os.Stdout, trunkVer)
 		return
 	}
 
-	fmt.Fprintln(out, trunkver.MergeWithBaseVersion(baseVersion, trunkVer))
+	fmt.Fprintln(os.Stdout, trunkver.MergeWithBaseVersion(args[0], trunkVer))
 }
