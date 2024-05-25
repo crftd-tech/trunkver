@@ -40,27 +40,24 @@ tests:
       Error: --source-ref missing, your CI might be unsupported. Specify it manually. It should identify the commit that was used to build this artifact, e.g. "g${GITHUB_SHA:0:7}" or "g$(git rev-parse --short HEAD)".
 
   - name: ci/github
-    command: |
-      export GITHUB_SHA=1234567890abcdef1234567890abcdef12345678
-      export GITHUB_RUN_ID=GITHUBRUN
-      trunkver --timestamp "2024-05-22T16:25:48+02:00"
+    environment:
+      GITHUB_SHA: 1234567890abcdef1234567890abcdef12345678
+      GITHUB_RUN_ID: GITHUBRUN
     stdout: |
       20240522142548.0.0-g1234567-GITHUBRUN
 
   - name: ci/gitlab
-    command: |
-      export GITLAB_CI=true
-      export CI_COMMIT_SHA=1234567890abcdef1234567890abcdef12345678
-      export CI_JOB_ID=GITLABRUN
-      trunkver --timestamp "2024-05-22T16:25:48+02:00"
+    environment:
+      GITLAB_CI: "true"
+      CI_COMMIT_SHA: 1234567890abcdef1234567890abcdef12345678
+      CI_JOB_ID: GITLABRUN
     stdout: |
       20240522142548.0.0-g1234567-GITLABRUN
 
   - name: ci/circleci
-    command: |
-      export CIRCLECI=true
-      export CIRCLE_SHA1=1234567890abcdef1234567890abcdef12345678
-      export CIRCLE_WORKFLOW_JOB_ID=CIRCLECIJOB
-      trunkver --timestamp "2024-05-22T16:25:48+02:00"
+    environment:
+      CIRCLECI: "true"
+      CIRCLE_SHA1: 1234567890abcdef1234567890abcdef12345678
+      CIRCLE_WORKFLOW_JOB_ID: CIRCLECIJOB
     stdout: |
       20240522142548.0.0-g1234567-CIRCLECIJOB
