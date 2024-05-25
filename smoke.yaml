@@ -63,7 +63,7 @@ tests:
       - "g1234567"
     exit-status: 1
     stderr: |
-      Error: --build-ref missing, your CI might be unsupported. Specify it manually. It should identify the log that was produced during creation of this artifact, e.g. the Job Id in Github Actions
+      Error: --build-ref missing, your CI might be unsupported. It should identify the log that was produced during creation of this artifact, e.g. the Job Id in Github Actions
 
   - name: panic/if-no-source-ref
     args:
@@ -71,7 +71,7 @@ tests:
       - "1234567"
     exit-status: 1
     stderr: |
-      Error: --source-ref missing, your CI might be unsupported. Specify it manually. It should identify the commit that was used to build this artifact, e.g. "g${GITHUB_SHA:0:7}" or "g$(git rev-parse --short HEAD)".
+      Error: --source-ref missing, your CI might be unsupported. It should identify the commit that was used to build this artifact, e.g. "g${GITHUB_SHA:0:7}" or "g$(git rev-parse --short HEAD)".
 
   - name: ci/github
     environment:
