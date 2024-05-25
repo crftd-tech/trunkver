@@ -7,27 +7,11 @@ import (
 	"os"
 	"time"
 
-	"github.com/coreos/go-semver/semver"
 	"github.com/crftd-tech/trunkver/internal/ci"
+	"github.com/crftd-tech/trunkver/internal/trunkver"
 )
 
 var Version string = "0.0.0-HEAD-local"
-
-type SPEC string
-
-const (
-	FULL_SEMVER     SPEC = "full"
-	PRERELEASE_ONLY SPEC = "prerelease"
-)
-
-func formatTrunkver(ts time.Time, sourceRef, buildRef string, spec SPEC) string {
-	if spec == FULL_SEMVER {
-		return ts.UTC().Format("20060102150405") + ".0.0-" + sourceRef + "-" + buildRef
-	} else if spec == PRERELEASE_ONLY {
-		return ts.UTC().Format("20060102150405") + "-" + sourceRef + "-" + buildRef
-	}
-	panic("Invalid spec: " + string(spec))
-}
 
 func main() {
 	run(os.Stdout, os.Stderr, os.Args)
@@ -82,20 +66,15 @@ func run(out io.Writer, err io.Writer, args []string) {
 	}
 
 	if !*prereleaseOnly {
-		fmt.Fprintln(out, formatTrunkver(parsedTime, *sRef, *bRef, FULL_SEMVER))
+		fmt.Fprintln(out, trunkver.FormatMajorTrunkver(parsedTime, *sRef, *bRef))
 		return
 	}
 
-	var trunkVer string = formatTrunkver(parsedTime, *sRef, *bRef, PRERELEASE_ONLY)
+	var trunkVer string = trunkver.FormatPrereleaseTrunkver(parsedTime, *sRef, *bRef)
 	if baseVersion == "" {
 		fmt.Fprintln(out, trunkVer)
 		return
 	}
 
-	if baseVersion[0] == 'v' {
-		baseVersion = baseVersion[1:]
-	}
-	var semverBaseVersion = semver.New(baseVersion)
-	semverBaseVersion.PreRelease = semver.PreRelease(trunkVer)
-	fmt.Fprintln(out, semverBaseVersion.String())
+	fmt.Fprintln(out, trunkver.MergeWithBaseVersion(baseVersion, trunkVer))
 }

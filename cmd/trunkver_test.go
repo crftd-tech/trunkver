@@ -4,26 +4,10 @@ import (
 	"io"
 	"os"
 	"testing"
-	"time"
 
 	"github.com/stretchr/testify/assert"
 )
 
-func TestApplicationVersion(t *testing.T) {
-	now, err := time.Parse(time.RFC3339, "2024-05-22T16:25:48+02:00")
-	if err != nil {
-		panic(err)
-	}
-	assert.Equal(t,
-		"20240522142548.0.0-gb4dc0d3-12345",
-		formatTrunkver(now, "gb4dc0d3", "12345", FULL_SEMVER),
-		"Should create a semver-compatible version",
-	)
-}
-
-func TestVersion(t *testing.T) {
-
-}
 func TestPassAllExplicitArgs(t *testing.T) {
 	args := []string{
 		"trunkver",

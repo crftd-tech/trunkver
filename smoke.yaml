@@ -23,7 +23,7 @@ tests:
     stdout: |
       20240522142548-g1234567-R4242
 
-  - name: prerelease/panic-if-invalid-semver
+  - name: prerelease/coerces-into-semver
     args:
       - --source-ref
       - "g1234567"
@@ -31,9 +31,8 @@ tests:
       - "R4242"
       - --prerelease
       - "0"
-    exit-status: 2
-    stderr: 
-      contains: panic
+    stdout: |
+      0.0.0-20240522142548-g1234567-R4242
 
   - name: prerelease/with-given-semver
     args:
