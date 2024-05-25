@@ -37,7 +37,7 @@ jobs:
       - name: Build trunkver
         env:
           VERSION: ${{ needs.generate-version.outputs.trunkver }}
-        run: go build -o trunkver_linux_amd64 -ldflags "-X main.Version=${VERSION}"
+        run: make test trunkver_linux_amd64 spec "VERSION=${VERSION}"
       - name: Create empty release
         id: release
         uses: softprops/action-gh-release@v1

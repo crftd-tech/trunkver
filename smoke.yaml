@@ -1,5 +1,5 @@
 command:
-  - trunkver
+  - trunkver_linux_amd64
   - --timestamp
   - "2024-05-22T16:25:48+02:00"
 
