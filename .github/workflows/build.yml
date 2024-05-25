@@ -41,16 +41,16 @@ jobs:
           (
             unset GITHUB_SHA
             unset GITHUB_RUN_ID
-            make test trunkver_linux_amd64 spec "VERSION=${VERSION}"
+            make test all spec "VERSION=${VERSION}"
           )
-      - name: Create empty release
+      - name: Create release
         id: release
         uses: softprops/action-gh-release@v1
         with:
           name: ${{ needs.generate-version.outputs.trunkver }}
           tag_name: ${{ needs.generate-version.outputs.trunkver }}
           files: |
-            trunkver_linux_amd64
+            out/trunkver*
 
   build-docker:
     runs-on: ubuntu-latest

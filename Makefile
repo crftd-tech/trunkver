@@ -5,14 +5,24 @@ VERSION ?= 0.0.0-HEAD-local
 test:
 	go test -v 
 
+out:
+	@mkdir -p out || true
 
-trunkver_linux_amd64: trunkver.go
-	GOOS=linux GOARCH=amd64 go build -ldflags "-X main.Version=$(VERSION)" -o trunkver_linux_amd64
+PLATFORMS := darwin_arm64 darwin_amd64 linux_amd64 linux_arm64 windows_amd64
 
-smoke:
-	curl -sL https://github.com/SamirTalwar/smoke/releases/download/v2.4.0/smoke-v2.4.0-Linux-x86_64 -o smoke
-	chmod a+x smoke
+.PHONY: all
+all: $(addprefix out/trunkver_, $(PLATFORMS))
+
+.PHONY: $(addprefix out/trunkver_, $(PLATFORMS))
+$(addprefix out/trunkver_, $(PLATFORMS)): out
+	GOOS=$(word 2,$(subst _, ,$@)) \
+	  GOARCH=$(word 3,$(subst _, ,$@)) \
+	  go build -ldflags "-X main.Version=$(VERSION)" -o $@
+
+out/smoke: out
+	curl -sL https://github.com/SamirTalwar/smoke/releases/download/v2.4.0/smoke-v2.4.0-Linux-x86_64 -o $@
+	chmod a+x $@
 
 .PHONY: spec
-spec: trunkver_linux_amd64 smoke
-	./smoke .
+spec: out/trunkver_linux_amd64 out/smoke
+	./out/smoke .

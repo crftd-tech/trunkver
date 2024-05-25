@@ -15,6 +15,6 @@ RUN make test trunkver_linux_amd64 spec "VERSION=${VERSION}"
 # so we can write the trunkver to GITHUB_OUTPUT
 FROM busybox
 
-COPY --from=builder /app/trunkver_linux_amd64 /trunkver
+COPY --from=builder /app/out/trunkver_linux_amd64 /trunkver
 
 ENTRYPOINT ["/trunkver"]
