@@ -21,7 +21,42 @@ tests:
       - "R4242"
       - --prerelease
     stdout: |
-      -20240522142548-g1234567-R4242
+      20240522142548-g1234567-R4242
+
+  - name: prerelease/panic-if-invalid-semver
+    args:
+      - --source-ref
+      - "g1234567"
+      - --build-ref
+      - "R4242"
+      - --prerelease
+      - "0"
+    exit-status: 2
+    stderr: 
+      contains: panic
+
+  - name: prerelease/with-given-semver
+    args:
+      - --source-ref
+      - "g1234567"
+      - --build-ref
+      - "R4242"
+      - --prerelease
+      - "0.1.0"
+    stdout: |
+      0.1.0-20240522142548-g1234567-R4242
+
+  - name: prerelease/with-given-semver-with-v
+    args:
+      - --source-ref
+      - "g1234567"
+      - --build-ref
+      - "R4242"
+      - --prerelease
+      - "v0.1.0"
+    stdout: |
+      0.1.0-20240522142548-g1234567-R4242
+
 
   - name: panic/if-no-build-ref
     args:

@@ -1,6 +1,15 @@
 name: trunkver
 description: Create a trunkver for this github action run
 author: crftd.tech
+inputs:
+  baseVersion:
+    description: The base version to use
+    required: false
+    default: ""
+  prerelease:
+    description: The prerelease version to use
+    required: false
+    default: "false"
 outputs:
   trunkver:
     description: The trunkver
@@ -13,4 +22,4 @@ runs:
     - -o
     - pipefail
     - -c
-    - echo trunkver=$(/trunkver) | tee $GITHUB_OUTPUT
+    - echo trunkver=$(/trunkver "--prerelease=${{ inputs.prerelease }}" "${{ inputs.baseVersion }}") | tee $GITHUB_OUTPUT

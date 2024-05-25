@@ -7,6 +7,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/coreos/go-semver/semver"
 	"github.com/crftd-tech/trunkver/internal/ci"
 )
 
@@ -23,7 +24,7 @@ func formatTrunkver(ts time.Time, sourceRef, buildRef string, spec SPEC) string 
 	if spec == FULL_SEMVER {
 		return ts.UTC().Format("20060102150405") + ".0.0-" + sourceRef + "-" + buildRef
 	} else if spec == PRERELEASE_ONLY {
-		return "-" + ts.UTC().Format("20060102150405") + "-" + sourceRef + "-" + buildRef
+		return ts.UTC().Format("20060102150405") + "-" + sourceRef + "-" + buildRef
 	}
 	panic("Invalid spec: " + string(spec))
 }
@@ -41,6 +42,7 @@ func run(out io.Writer, err io.Writer, args []string) {
 	prereleaseOnly := flagSet.Bool("prerelease", false, "Build the trunkver as the prerelease part of a version (e.g. for nightly builds)")
 
 	flagSet.Parse(args[1:])
+	baseVersion := flagSet.Arg(0)
 
 	if *version {
 		fmt.Fprintln(err, Version)
@@ -79,10 +81,21 @@ func run(out io.Writer, err io.Writer, args []string) {
 		}
 	}
 
-	var spec SPEC = FULL_SEMVER
-	if *prereleaseOnly {
-		spec = PRERELEASE_ONLY
+	if !*prereleaseOnly {
+		fmt.Fprintln(out, formatTrunkver(parsedTime, *sRef, *bRef, FULL_SEMVER))
+		return
 	}
 
-	fmt.Fprintln(out, formatTrunkver(parsedTime, *sRef, *bRef, spec))
+	var trunkVer string = formatTrunkver(parsedTime, *sRef, *bRef, PRERELEASE_ONLY)
+	if baseVersion == "" {
+		fmt.Fprintln(out, trunkVer)
+		return
+	}
+
+	if baseVersion[0] == 'v' {
+		baseVersion = baseVersion[1:]
+	}
+	var semverBaseVersion = semver.New(baseVersion)
+	semverBaseVersion.PreRelease = semver.PreRelease(trunkVer)
+	fmt.Fprintln(out, semverBaseVersion.String())
 }
