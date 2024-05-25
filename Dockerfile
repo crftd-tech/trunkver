@@ -7,6 +7,7 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 COPY Makefile *.go ./
+COPY cmd cmd
 COPY internal internal
 
 RUN make test out/trunkver_linux_amd64 spec "VERSION=${VERSION}" 
