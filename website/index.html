@@ -154,7 +154,7 @@
         }
         tr.code {
           font-family: "Source Code Pro", monospace;
-          font-size: 0.25em;
+          font-size: 0.4em;
         }
       }
     }
@@ -185,13 +185,13 @@
           <tr class="code">
             <td>date -u +%Y%m%d%H%M%S</td>
             <td>&nbsp;</td>
-            <td>"g$(git rev-parse --short HEAD)"</td>
+            <td>git rev-parse --short HEAD</td>
             <td>&nbsp;</td>
-            <td>"${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"</td>
+            <td>${CI_JOB_ID}</td>
           </tr>
         </table>
       </div>
-      <h2>tl;dr</h2>
+      <h2>TL;DR</h2>
       <ul>
         <li>
           <h3>GitHub Action</h3>
@@ -203,14 +203,14 @@
 - name: Print trunkver
   env:
     TRUNKVER: ${{ steps.trunkver.outputs.trunkver }}
-  run: |$ in front css
+  run: |
     echo "$TRUNKVER"
 </code></pre>
         </li>
         <li>
-          <h3>docker</h3>
+          <h3>Docker</h3>
           :
-          <pre><code>docker run ghcr.io/crftd-tech/trunkver:latest --build-ref my-ci-id --source-ref 1234abcd</code></pre>
+          <pre><code>docker run ghcr.io/crftd-tech/trunkver:latest --build-ref "$CI_JOB_ID" --source-ref "g$(git rev-parse --short HEAD)"</code></pre>
         </li>
         <li>
           <h3>Other CIs</h3>
@@ -220,10 +220,39 @@ chmod +x trunkver
 ./trunkver</code></pre>
         </li>
       </ul>
+      <h2>FAQ</h2>
+      <ul>
+        <li>
+          <b>Why only use the MAJOR semVer part as a timestamp?</b><br />Tools
+          (e.g. compliance, audit trails) might still classify a version based
+          on semVer semantics, hence trunkVer always defensively implies breaking
+          changes between versions.
+        </li>
+        <li>
+          <b
+            >Why do you use the PRERELEASE semVer part for source information
+            and not build?</b
+          ><br />Because OCI tags don't support <code>+</code> (see
+          <a href="https://github.com/distribution/distribution/issues/1201"
+            >distribution/distribution#1201</a
+          > and <a href="https://github.com/opencontainers/distribution-spec/issues/154">opencontainers/distribution-spec#154</a>). We'd rather have one consistent version across artifacts. Semantically, the only relevant portion for sorting of a trunkVer is the MAJOR version, and a conflict (as in creating two artifacts in the very same second) should be avoided.
+        </li>
+      </ul>
+
       <footer>
         Made with 🧡 for people &amp; tech, and disregard for busy-work by
-        <a href="https://crftd.tech">crafted. tech collective</a>
+        <a href="https://crftd.tech">crafted. tech collective</a>.
       </footer>
+      <small><code id="version"></code></small>
     </div>
   </body>
+  <script async defer>
+    window.addEventListener("DOMContentLoaded", () => {
+      fetch("./version.txt")
+        .then((response) => response.text())
+        .then((data) => {
+          document.getElementById("version").innerText = `Version: ${data}`;
+        });
+    });
+  </script>
 </html>
