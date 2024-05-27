@@ -15,7 +15,7 @@ outputs:
     description: The trunkver
 runs:
   using: docker
-  image: docker://ghcr.io/crftd-tech/trunkver:1.0.0-20240527111721-geb9f32c-9253911217
+  image: docker://ghcr.io/crftd-tech/trunkver:1.0.0-20240527113258-g9596270-9254099923
   entrypoint: /bin/sh
   args:
     - -eu
