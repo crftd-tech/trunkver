@@ -32,7 +32,7 @@
         width: 90%;
       }
       ul {
-        padding: 0;
+        padding-left: 20px;
       }
     }
     @font-face {
@@ -46,8 +46,7 @@
     }
     @font-face {
       font-family: "Source Code Pro";
-      src: url("SourceCodePro-SemiBold.ttf") format("truetype");
-      font-weight: 600;
+      src: url("SourceCodePro-VariableFont_wght.ttf") format("truetype");
     }
 
     a,
@@ -127,34 +126,95 @@
       background-color: #f4f4f4;
       border-radius: 0.5em;
       font-size: 2em;
-      overflow-x: auto;
-      table {
-        width: 100%;
-        min-width: 600px;
-        border-collapse: collapse;
+      border-collapse: collapse;
 
-        @media screen and (max-width: 800px) {
-          tr.version {
-            font-size: 0.4em;
-          }
-          tr.description {
-            font-size: 0.3em;
-          }
-        }
-        tr {
-          text-align: center;
-        }
+      div {
+        text-align: center;
+      }
 
-        tr.version {
-          font-family: "Source Code Pro", monospace;
+      .version {
+        font-family: "Source Code Pro", monospace;
+        font-weight: 800;
+        font-size: 0.8em;
+        color: #ff8e40;
+        
+      }
+
+      .description {
+        font-style: italic;
+        font-size: 0.5em;
+        padding-bottom: 0.5em;
+        color: #3f3f3f;
+      }
+      .code {
+        font-family: "Source Code Pro", monospace;
+        font-size: 0.4em;
+      }
+
+      .hero-grid {
+        display: grid;
+        grid-template-columns: 1fr 0.2fr 1fr 0.2fr 1fr;
+      }
+
+      @media screen and (max-width: 800px) {
+        .version {
+          font-size: 0.6em;
         }
-        tr.description {
-          font-style: italic;
-          font-size: 0.5em;
-        }
-        tr.code {
-          font-family: "Source Code Pro", monospace;
+        .description {
           font-size: 0.4em;
+        }
+
+        .hero-grid {
+          .code {
+            display: none;
+          }
+        }
+      }
+      @media screen and (max-width: 500px) {
+        .hero-grid {
+          grid-template-columns: repeat(1, 1fr);
+          .version:not(.build-ref):after {
+            content: "-";
+          }
+
+          .grid-spacer {
+            display: none;
+          }
+
+          .description {
+            padding-bottom: 1em;
+            font-size: 0.6em;
+          }
+
+          .version.timestamp {
+            order: 1;
+          }
+          .description.timestamp {
+            order: 2;
+          }
+          .code.timestamp {
+            order: 3;
+          }
+
+          .version.source-ref {
+            order: 4;
+          }
+          .description.source-ref {
+            order: 5;
+          }
+          .code.source-ref {
+            order: 6;
+          }
+
+          .version.build-ref {
+            order: 7;
+          }
+          .description.build-ref {
+            order: 8;
+          }
+          .code.build-ref {
+            order: 9;
+          }
         }
       }
     }
@@ -164,34 +224,37 @@
       <h1>
         <span class="logo">trunkVer</span>
       </h1>
-      <p>... so we can stop talking about versions and start shipping 🚀</p>
+      <p>so we can stop talking about versions and start shipping.</p>
       <div class="spacer"></div>
       <div class="hero">
-        <table>
-          <tr class="version">
-            <td>20240527125612.0.0</td>
-            <td>-</td>
-            <td>g13866bd</td>
-            <td>-</td>
-            <td>9253259568</td>
-          </tr>
-          <tr class="description">
-            <td>When was it built</td>
-            <td>&nbsp;</td>
-            <td>What was built</td>
-            <td>&nbsp;</td>
-            <td>How was it built</td>
-          </tr>
-          <tr class="code">
-            <td>date -u +%Y%m%d%H%M%S</td>
-            <td>&nbsp;</td>
-            <td>git rev-parse --short HEAD</td>
-            <td>&nbsp;</td>
-            <td>${CI_JOB_ID}</td>
-          </tr>
-        </table>
+        <div class="hero-grid">
+          <div class="version timestamp">20240527125612.0.0</div>
+          <div class="version grid-spacer">-</div>
+          <div class="version source-ref">g13866bd</div>
+          <div class="version grid-spacer">-</div>
+          <div class="version build-ref">9253259568</div>
+          <div class="description timestamp">When it was built</div>
+          <div class="description grid-spacer">&nbsp;</div>
+          <div class="description source-ref">What was built</div>
+          <div class="description grid-spacer">&nbsp;</div>
+          <div class="description build-ref">How it was built</div>
+          <div class="code timestamp">date -u +%Y%m%d%H%M%S</div>
+          <div class="code grid-spacer">&nbsp;</div>
+          <div class="code source-ref">git rev-parse --short HEAD</div>
+          <div class="code grid-spacer">&nbsp;</div>
+          <div class="code build-ref">${CI_JOB_ID}</div>
+        </div>
       </div>
       <h2>TL;DR</h2>
+      <p>
+        <code>trunkVer</code> is a semVer-compatible versioning scheme for
+        trunk-based applications and systems that don't follow a release scheme.
+      </p>
+      <p>
+        It removes the chore of manually bumping version numbers and instead
+        enriches the version number with three important data points: The
+        <b>when</b>, <b>what</b> and <b>how</b>.
+      </p>
       <ul>
         <li>
           <h3>GitHub Action</h3>
@@ -225,8 +288,8 @@ chmod +x trunkver
         <li>
           <b>Why only use the MAJOR semVer part as a timestamp?</b><br />Tools
           (e.g. compliance, audit trails) might still classify a version based
-          on semVer semantics, hence trunkVer always defensively implies breaking
-          changes between versions.
+          on semVer semantics, hence trunkVer always defensively implies
+          breaking changes between versions.
         </li>
         <li>
           <b
@@ -235,14 +298,32 @@ chmod +x trunkver
           ><br />Because OCI tags don't support <code>+</code> (see
           <a href="https://github.com/distribution/distribution/issues/1201"
             >distribution/distribution#1201</a
-          > and <a href="https://github.com/opencontainers/distribution-spec/issues/154">opencontainers/distribution-spec#154</a>). We'd rather have one consistent version across artifacts. Semantically, the only relevant portion for sorting of a trunkVer is the MAJOR version, and a conflict (as in creating two artifacts in the very same second) should be avoided.
+          >
+          and
+          <a
+            href="https://github.com/opencontainers/distribution-spec/issues/154"
+            >opencontainers/distribution-spec#154</a
+          >). We'd rather have one consistent version across artifacts.
+          Semantically, the only relevant portion for sorting of a trunkVer is
+          the MAJOR version, and a conflict (as in creating two artifacts in the
+          very same second) should be avoided.
         </li>
       </ul>
-
+      <h2>Links</h2>
+      <ul>
+        <li>
+          <a href="https://github.com/crftd-tech/trunkver"
+            >https://github.com/crftd-tech/trunkver</a
+          >
+        </li>
+        <li><a href="https://crftd.tech/">https://crftd.tech/</a></li>
+      </ul>
+      <div class="spacer"></div>
       <footer>
         Made with 🧡 for people &amp; tech, and disregard for busy-work by
         <a href="https://crftd.tech">crafted. tech collective</a>.
       </footer>
+      <br />
       <small><code id="version"></code></small>
     </div>
   </body>
