@@ -1,0 +1,32 @@
+{% assign version = pkg.version | split: "-" %} {% assign timestamp = version |
+first %} {% assign sourceRef = version[1] %} {% assign buildRef = version |
+slice: 2, version.size | join: "-" %}
+
+<div class="hero">
+  <div class="hero-grid">
+    <div class="version timestamp">{{ timestamp }}</div>
+    <div class="version grid-spacer">-</div>
+    <div class="version source-ref">
+      <a href="https://github.com/crftd-tech/trunkver/commit/{{ sourceRef }}"
+        >{{ sourceRef }}</a
+      >
+    </div>
+    <div class="version grid-spacer">-</div>
+    <div class="version build-ref">
+      <a
+        href="https://github.com/crftd-tech/trunkver/actions/runs/{{ buildRef | split: '-' | first }}/attempts/{{ buildRef | split: '-' | last }}"
+        >{{ buildRef }}</a
+      >
+    </div>
+    <div class="description timestamp">When it was built</div>
+    <div class="description grid-spacer">&nbsp;</div>
+    <div class="description source-ref">What was built</div>
+    <div class="description grid-spacer">&nbsp;</div>
+    <div class="description build-ref">How it was built</div>
+    <div class="code timestamp">date -u +%Y%m%d%H%M%S</div>
+    <div class="code grid-spacer">&nbsp;</div>
+    <div class="code source-ref">git rev-parse --short HEAD</div>
+    <div class="code grid-spacer">&nbsp;</div>
+    <div class="code build-ref">${CI_JOB_ID}</div>
+  </div>
+</div>

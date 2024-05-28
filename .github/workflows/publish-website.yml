@@ -20,20 +20,37 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: website/
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version-file: './website/.nvmrc'
+          cache: 'npm'
+          cache-dependency-path: './website/package-lock.json'
+
+
       - name: Generate trunkver
         id: trunkver
         uses: crftd-tech/trunkver@main
-      - name: Write trunkver to file
-        run: echo ${{ steps.trunkver.outputs.trunkver }} > website/version.txt
+      - name: Bump version in package.json
+        run: npm pkg set "version=${{ steps.trunkver.outputs.trunkver }}"
+
+      - name: Install dependencies
+        run: npm ci
+      - name: Build website
+        run: npm run build
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'website/'
+          path: 'website/_site/'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4

@@ -1,5 +1,15 @@
 {
   "name": "Go",
   "image": "mcr.microsoft.com/devcontainers/go:1.22",
-  "onCreateCommand": "go get && go mod download && make smoke"
+  "onCreateCommand": "go get && go mod download && make smoke",
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "esbenp.prettier-vscode"
+      ]
+    }
+  }
 }
