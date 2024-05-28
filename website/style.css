@@ -2,7 +2,7 @@ document,
 body,
 window {
   font-family: "Frank Ruhl Libre", serif;
-  font-size: 16px;
+  font-size: 21px;
 }
 
 body {
@@ -15,11 +15,13 @@ body {
 }
 
 .content {
-  width: 800px;
+  padding-top: 20vh;
+  width: 1000px;
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 1000px) {
   .content {
+    padding-top: 10px;
     width: 90%;
   }
   ul {
@@ -28,16 +30,16 @@ body {
 }
 @font-face {
   font-family: "Frank Ruhl Libre";
-  src: url("FrankRuhlLibre-VariableFont_wght.ttf") format("truetype");
+  src: url("assets/FrankRuhlLibre-VariableFont_wght.ttf") format("truetype");
 }
 @font-face {
   font-family: "Work Sans";
-  src: url("WorkSans-Thin.ttf") format("truetype");
+  src: url("assets/WorkSans-Thin.ttf") format("truetype");
   font-weight: 100;
 }
 @font-face {
   font-family: "Source Code Pro";
-  src: url("SourceCodePro-VariableFont_wght.ttf") format("truetype");
+  src: url("assets/SourceCodePro-VariableFont_wght.ttf") format("truetype");
 }
 
 a,
@@ -89,7 +91,7 @@ pre {
   border-radius: 0.5em;
   overflow-x: auto;
   padding: 1em;
-
+  font-size: 0.6em !important;
   @media screen and (max-width: 800px) {
     font-size: 0.8em;
   }

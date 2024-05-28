@@ -6,6 +6,7 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addPlugin(syntaxHighlight);
   eleventyConfig.addPassthroughCopy({
     [prismCss]: "prism.css",
-	"style.css": "style.css",
+    "style.css": "style.css",
+    "assets/": "assets/",
   });
 };
