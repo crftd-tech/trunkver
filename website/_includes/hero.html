@@ -7,7 +7,7 @@ slice: 2, version.size | join: "-" %}
     <div class="version timestamp">{{ timestamp }}</div>
     <div class="version grid-spacer">-</div>
     <div class="version source-ref">
-      <a href="https://github.com/crftd-tech/trunkver/commit/{{ sourceRef }}"
+      <a href="https://github.com/crftd-tech/trunkver/commit/{{ sourceRef | slice: 1, sourceRef.size}}"
         >{{ sourceRef }}</a
       >
     </div>
