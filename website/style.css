@@ -87,7 +87,7 @@ pre {
   overflow-x: auto;
   padding: 1em;
   font-size: 0.6em !important;
-  @media screen and (max-width: 800px) {
+  @media screen and (max-width: 1000px) {
     font-size: 0.8em;
   }
 }
@@ -153,12 +153,12 @@ blockquote {
     grid-template-columns: 1fr 0.2fr 1fr 0.2fr 1fr;
   }
 
-  @media screen and (max-width: 800px) {
+  @media screen and (max-width: 1000px) {
     .version {
-      font-size: 0.6em;
+      font-size: 0.5em;
     }
     .description {
-      font-size: 0.4em;
+      font-size: 0.3em;
     }
 
     .hero-grid {
@@ -167,7 +167,7 @@ blockquote {
       }
     }
   }
-  @media screen and (max-width: 500px) {
+  @media screen and (max-width: 600px) {
     .hero-grid {
       grid-template-columns: repeat(1, 1fr);
       .version:not(.build-ref):after {
