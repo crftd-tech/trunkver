@@ -33,11 +33,6 @@ body {
   src: url("assets/FrankRuhlLibre-VariableFont_wght.ttf") format("truetype");
 }
 @font-face {
-  font-family: "Work Sans";
-  src: url("assets/WorkSans-Thin.ttf") format("truetype");
-  font-weight: 100;
-}
-@font-face {
   font-family: "Source Code Pro";
   src: url("assets/SourceCodePro-VariableFont_wght.ttf") format("truetype");
 }
