@@ -29,7 +29,7 @@ enriches the version number with three important data points: The
 
 - name: Print trunkver
   env:
-  TRUNKVER: ${{ steps.trunkver.outputs.trunkver }}
+  TRUNKVER: ${{'{{ steps.trunkver.outputs.trunkver }}'}}
   run: |
     echo "$TRUNKVER"
 ```
@@ -37,7 +37,7 @@ enriches the version number with three important data points: The
 ### Docker
 
 ```sh
-docker run ghcr.io/crftd-tech/trunkver:latest --build-ref "$CI_JOB_ID" --source-ref "g$(git rev-parse --short HEAD)"
+docker run --rm ghcr.io/crftd-tech/trunkver:latest generate --build-ref "$CI_JOB_ID" --source-ref "g$(git rev-parse --short HEAD)"
 ```
 
 ### Other CIs
@@ -45,7 +45,7 @@ docker run ghcr.io/crftd-tech/trunkver:latest --build-ref "$CI_JOB_ID" --source-
 ```sh
 curl -sSL https://github.com/crftd-tech/trunkver/releases/latest/download/trunkver_linux_amd64 -o trunkver
 chmod +x trunkver
-./trunkver
+./trunkver generate
 ```
 
 ## FAQ
