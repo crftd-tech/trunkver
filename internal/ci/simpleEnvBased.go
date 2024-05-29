@@ -4,6 +4,7 @@ import "os"
 
 type SimpleEnvBased struct {
 	Name         string
+	ScmPrefix    string
 	DetectKey    string
 	SourceRefKey string
 	BuildRefKey  string
@@ -15,7 +16,7 @@ func (g *SimpleEnvBased) IsInUse() bool {
 
 func (g *SimpleEnvBased) Get() CIData {
 	return CIData{
-		SourceRef: "g" + os.Getenv(g.SourceRefKey)[:7],
+		SourceRef: g.ScmPrefix + os.Getenv(g.SourceRefKey)[:7],
 		BuildRef:  os.Getenv(g.BuildRefKey),
 	}
 }

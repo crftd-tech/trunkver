@@ -6,5 +6,6 @@ func init() {
 		DetectKey:    "CIRCLECI",
 		SourceRefKey: "CIRCLE_SHA1",
 		BuildRefKey:  "CIRCLE_WORKFLOW_JOB_ID",
+		ScmPrefix:    "g",
 	})
 }
