@@ -7,7 +7,7 @@ inputs:
     required: false
     default: ""
   prerelease:
-    description: Whether to generate the prerelease part of a SemVer 
+    description: Whether to generate the prerelease part of a SemVer
     required: false
     default: "false"
 outputs:
@@ -15,7 +15,7 @@ outputs:
     description: The TrunkVer
 runs:
   using: docker
-  image: docker://ghcr.io/crftd-tech/trunkver:1.0.0-20240528143047-gd80b8d2-9271269072-1
+  image: 'docker://ghcr.io/crftd-tech/trunkver:'
   entrypoint: /bin/sh
   args:
     - -eu
