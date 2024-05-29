@@ -38,7 +38,7 @@ out:
 $(addprefix out/trunkver_, $(PLATFORMS)): out test
 	GOOS=$(word 2,$(subst _, ,$@)) \
 	  GOARCH=$(word 3,$(subst _, ,$@)) \
-	  go build -ldflags "-X github.com/crftd-tech/trunkver/cmd.Version=$(VERSION)" -o $@ ./main.go
+	  go build -ldflags "-X github.com/crftd-tech/trunkver/internal.Version=$(VERSION)" -o $@ ./main.go
 
 out/smoke: out
 	curl -sL https://github.com/SamirTalwar/smoke/releases/download/v2.4.0/smoke-v2.4.0-$(SMOKE_PLATFORM) -o $@
@@ -46,4 +46,4 @@ out/smoke: out
 
 .PHONY: spec
 spec: out/trunkver_$(LOCAL_PLATFORM) out/smoke
-	./out/smoke --command="./out/trunkver_$(LOCAL_PLATFORM) --timestamp 2024-05-22T16:25:48+02:00" .
+	./out/smoke --command="./out/trunkver_$(LOCAL_PLATFORM)" .

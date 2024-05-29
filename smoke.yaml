@@ -1,11 +1,28 @@
-# command:
-#   - trunkver
-#   - --timestamp
-#   - "2024-05-22T16:25:48+02:00"
-
 tests:
-  - name: simple
+  - name: parse/default-is-json
     args:
+      - parse
+      - "20240522142548.0.0-g1234567-R4242"
+    filter:
+      - jq
+      - .
+    stdout: |
+      {"timestamp":"2024-05-22T14:25:48Z","sourceRef":{"commitHash":"1234567","scmPrefix":"g","rawRef":"g1234567"},"buildRef":"R4242"}
+
+  - name: parse/go-format
+    args:
+      - parse
+      - "20240522142548.0.0-g1234567-R4242"
+      - --format 
+      - '{{ .Timestamp.Format "20060102150405" }}/{{ .SourceRef.RawRef }}/{{ .BuildRef }}'
+    stdout: |
+      20240522142548/g1234567/R4242
+
+  - name: generate/simple
+    args:
+      - generate
+      - --timestamp 
+      - "2024-05-22T16:25:48+02:00"
       - --source-ref
       - "g1234567"
       - --build-ref
@@ -13,8 +30,11 @@ tests:
     stdout: |
       20240522142548.0.0-g1234567-R4242
 
-  - name: prerelease
+  - name: generate/prerelease
     args:
+      - generate
+      - --timestamp 
+      - "2024-05-22T16:25:48+02:00"
       - --source-ref
       - "g1234567"
       - --build-ref
@@ -23,8 +43,11 @@ tests:
     stdout: |
       20240522142548-g1234567-R4242
 
-  - name: prerelease/coerces-into-semver
+  - name: generate/prerelease/coerces-into-semver
     args:
+      - generate
+      - --timestamp 
+      - "2024-05-22T16:25:48+02:00"
       - --source-ref
       - "g1234567"
       - --build-ref
@@ -34,8 +57,11 @@ tests:
     stdout: |
       0.0.0-20240522142548-g1234567-R4242
 
-  - name: prerelease/with-given-semver
+  - name: generate/prerelease/with-given-semver
     args:
+      - generate
+      - --timestamp 
+      - "2024-05-22T16:25:48+02:00"
       - --source-ref
       - "g1234567"
       - --build-ref
@@ -45,8 +71,11 @@ tests:
     stdout: |
       0.1.0-20240522142548-g1234567-R4242
 
-  - name: prerelease/with-given-semver-with-v
+  - name: generate/prerelease/with-given-semver-with-v
     args:
+      - generate
+      - --timestamp 
+      - "2024-05-22T16:25:48+02:00"
       - --source-ref
       - "g1234567"
       - --build-ref
@@ -57,42 +86,60 @@ tests:
       0.1.0-20240522142548-g1234567-R4242
 
 
-  - name: panic/if-no-build-ref
+  - name: generate/panic/if-no-build-ref
     args:
+      - generate
+      - --timestamp 
+      - "2024-05-22T16:25:48+02:00"
       - --source-ref
       - "g1234567"
     exit-status: 1
     stderr: |
       Error: --build-ref missing, your CI might be unsupported. It should identify the log that was produced during creation of this artifact, e.g. the Job Id in Github Actions
 
-  - name: panic/if-no-source-ref
+  - name: generate/panic/if-no-source-ref
     args:
+      - generate
+      - --timestamp 
+      - "2024-05-22T16:25:48+02:00"
       - --build-ref
       - "1234567"
     exit-status: 1
     stderr: |
       Error: --source-ref missing, your CI might be unsupported. It should identify the commit that was used to build this artifact, e.g. "g${GITHUB_SHA:0:7}" or "g$(git rev-parse --short HEAD)".
 
-  - name: ci/github
+  - name: generate/ci/github
     environment:
       GITHUB_SHA: 1234567890abcdef1234567890abcdef12345678
       GITHUB_RUN_ID: GITHUBRUN
       GITHUB_RUN_ATTEMPT: "3"
+    args: 
+      - generate
+      - --timestamp 
+      - "2024-05-22T16:25:48+02:00"
     stdout: |
       20240522142548.0.0-g1234567-GITHUBRUN-3
 
-  - name: ci/gitlab
+  - name: generate/ci/gitlab
     environment:
       GITLAB_CI: "true"
       CI_COMMIT_SHA: 1234567890abcdef1234567890abcdef12345678
       CI_JOB_ID: GITLABRUN
+    args: 
+      - generate
+      - --timestamp 
+      - "2024-05-22T16:25:48+02:00"
     stdout: |
       20240522142548.0.0-g1234567-GITLABRUN
 
-  - name: ci/circleci
+  - name: generate/ci/circleci
     environment:
       CIRCLECI: "true"
       CIRCLE_SHA1: 1234567890abcdef1234567890abcdef12345678
       CIRCLE_WORKFLOW_JOB_ID: CIRCLECIJOB
+    args: 
+      - generate
+      - --timestamp 
+      - "2024-05-22T16:25:48+02:00"
     stdout: |
       20240522142548.0.0-g1234567-CIRCLECIJOB
