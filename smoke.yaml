@@ -95,7 +95,7 @@ tests:
       - "g1234567"
     exit-status: 1
     stderr: |
-      Error: --build-ref missing, your CI might be unsupported. It should identify the log that was produced during creation of this artifact, e.g. the Job Id in Github Actions
+      Error: --build-ref missing, your CI might be unsupported. It should identify the log that was produced during creation of this artifact, e.g. the job id in Github Actions
 
   - name: generate/panic/if-no-source-ref
     args:

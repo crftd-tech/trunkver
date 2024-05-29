@@ -12,7 +12,7 @@ import (
 var parseCmd = &cobra.Command{
 	Use:     "parse",
 	Aliases: []string{"p"},
-	Short:   "Parse a trunkVer",
+	Short:   "Parse a TrunkVer",
 	Args:    cobra.MaximumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		version, err := trunkver.ParseTrunkVer(args[0])

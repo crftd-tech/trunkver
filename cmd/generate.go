@@ -13,7 +13,7 @@ import (
 var generateCmd = &cobra.Command{
 	Use:     "generate",
 	Aliases: []string{"gen", "g"},
-	Short:   "Generate a new trunkVer",
+	Short:   "Generate a new TrunkVer",
 	Args:    cobra.MaximumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		var buildRef string = cmd.Flags().Lookup("build-ref").Value.String()
@@ -33,7 +33,7 @@ var generateCmd = &cobra.Command{
 		}
 
 		if buildRef == "" {
-			fmt.Fprintln(os.Stderr, "Error: --build-ref missing, your CI might be unsupported. It should identify the log that was produced during creation of this artifact, e.g. the Job Id in Github Actions")
+			fmt.Fprintln(os.Stderr, "Error: --build-ref missing, your CI might be unsupported. It should identify the log that was produced during creation of this artifact, e.g. the job id in Github Actions")
 			os.Exit(1)
 		}
 
@@ -72,7 +72,7 @@ func init() {
 	generateCmd.Flags().StringP("build-ref", "b", "", "The build ref to use (e.g. $GITHUB_RUN_ID)")
 	generateCmd.Flags().StringP("source-ref", "s", "", "The source ref to use for the version (e.g. \"g$(git rev-parse --short HEAD)\")")
 	generateCmd.Flags().StringP("timestamp", "t", "now", "The timestamp to use for the version in RFC3339 format")
-	generateCmd.Flags().BoolP("prerelease", "p", false, "Build the trunkver as the prerelease part of a semver (e.g. for nightly builds)")
+	generateCmd.Flags().BoolP("prerelease", "p", false, "Build the TrunkVer as the prerelease part of a semver (e.g. for nightly builds)")
 
 	rootCmd.AddCommand(generateCmd)
 }

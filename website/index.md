@@ -2,7 +2,7 @@
 layout: layout
 ---
 
-# <span class="logo">trunkVer</span>
+# <span class="logo">TrunkVer</span>
 
 so we can stop talking about versions and start shipping.
 
@@ -11,7 +11,7 @@ so we can stop talking about versions and start shipping.
 
 ## TL;DR
 
-`trunkVer` is a semVer-compatible versioning scheme for
+`TrunkVer` is a SemVer-compatible versioning scheme for
 trunk-based applications and systems that don't follow a release scheme.
 
 It removes the chore of manually bumping version numbers and instead
@@ -50,11 +50,11 @@ chmod +x trunkver
 
 ## FAQ
 
-- **Why only use the MAJOR semVer part as a timestamp?**  
-  Tools (e.g. compliance, audit trails) might still classify a version based on semVer semantics, hence trunkVer always defensively implies breaking changes between versions.
+- **Why only use the MAJOR SemVer part as a timestamp?**  
+  Tools (e.g. compliance, audit trails) might still classify a version based on SemVer semantics, hence TrunkVer always defensively implies breaking changes between versions.
 
-- **Why do you use the PRERELEASE semVer part for source information and not build?**  
-  Because OCI tags don't support `+` (see [distribution/distribution#1201](https://github.com/distribution/distribution/issues/1201) and [opencontainers/distribution-spec#154](https://github.com/opencontainers/distribution-spec/issues/154). We'd rather have one consistent version across artifacts. Semantically, the only relevant portion for sorting of a trunkVer is
+- **Why do you use the PRERELEASE SemVer part for source information and not build?**  
+  Because OCI tags don't support `+` (see [distribution/distribution#1201](https://github.com/distribution/distribution/issues/1201) and [opencontainers/distribution-spec#154](https://github.com/opencontainers/distribution-spec/issues/154). We'd rather have one consistent version across artifacts. Semantically, the only relevant portion for sorting of a TrunkVer is
   the MAJOR version, and a conflict (as in creating two artifacts in the
   very same second) should be avoided.
 
@@ -62,4 +62,5 @@ chmod +x trunkver
 
 - [https://github.com/crftd-tech/trunkver](https://github.com/crftd-tech/trunkver)
 - [https://crftd.tech/](https://crftd.tech/)
+- [https://semver.org](https://semver.org)
 
