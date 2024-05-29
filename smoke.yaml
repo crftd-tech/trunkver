@@ -30,6 +30,48 @@ tests:
     stdout: |
       20240522142548.0.0-g1234567-R4242
 
+  - name: generate/simple-output
+    args:
+      - generate
+      - --timestamp 
+      - "2024-05-22T16:25:48+02:00"
+      - --source-ref
+      - "g1234567"
+      - --build-ref
+      - "R4242"
+      - --output
+      - "out/output.txt"
+    stdout: |
+      20240522142548.0.0-g1234567-R4242
+    files:
+      - path: out/output.txt
+        contents: |
+          20240522142548.0.0-g1234567-R4242
+    revert:
+      - out
+
+  - name: generate/formatted-output
+    args:
+      - generate
+      - --timestamp 
+      - "2024-05-22T16:25:48+02:00"
+      - --source-ref
+      - "g1234567"
+      - --build-ref
+      - "R4242"
+      - --output
+      - "out/output.txt"
+      - --format
+      - "trunkver={{ . }}"
+    stdout: |
+      trunkver=20240522142548.0.0-g1234567-R4242
+    files:
+      - path: out/output.txt
+        contents: |
+          trunkver=20240522142548.0.0-g1234567-R4242
+    revert:
+      - out
+
   - name: generate/prerelease
     args:
       - generate
