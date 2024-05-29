@@ -18,6 +18,18 @@ tests:
     stdout: |
       20240522142548/g1234567/R4242
 
+  - name: generate/slugifies-illegal-characters
+    args:
+      - generate
+      - --timestamp 
+      - "2024-05-22T16:25:48+02:00"
+      - --source-ref
+      - "g1234567$_-+"
+      - --build-ref
+      - "R4242$_hy$phen-is-okay-in-build-ref+"
+    stdout: |
+      20240522142548.0.0-g1234567-R4242--hy-phen-is-okay-in-build-ref-
+
   - name: generate/simple
     args:
       - generate
