@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"bufio"
 	"encoding/json"
 	"fmt"
 	"text/template"
@@ -15,7 +16,24 @@ var parseCmd = &cobra.Command{
 	Short:   "Parse a TrunkVer",
 	Args:    cobra.MaximumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		version, err := trunkver.ParseTrunkVer(args[0])
+		var inputString string
+
+		if len(args) > 0 {
+			var err error
+			inputString = args[0]
+			if err != nil {
+				panic(err)
+			}
+		} else {
+			reader := bufio.NewReader(cmd.InOrStdin())
+			inputBA, _, err := reader.ReadLine()
+			inputString = string(inputBA)
+			if err != nil {
+				panic(err)
+			}
+		}
+
+		version, err := trunkver.ParseTrunkVer(inputString)
 		if err != nil {
 			panic(err)
 		}
