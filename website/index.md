@@ -29,7 +29,7 @@ enriches the version number with three important data points: The
 
 - name: Print trunkver
   env:
-  TRUNKVER: ${{'{{ steps.trunkver.outputs.trunkver }}'}}
+    TRUNKVER: ${{'{{ steps.trunkver.outputs.trunkver }}'}}
   run: |
     echo "$TRUNKVER"
 ```
