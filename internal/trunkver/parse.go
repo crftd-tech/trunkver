@@ -9,8 +9,8 @@ import (
 )
 
 type SourceRef struct {
-	CommitHash string `json:"commitHash"`
-	ScmPrefix  string `json:"scmPrefix"`
+	CommitHash string `json:"commitHash,omitempty"`
+	ScmPrefix  string `json:"scmPrefix,omitempty"`
 	RawRef     string `json:"rawRef"`
 }
 
@@ -21,10 +21,15 @@ type TrunkVer struct {
 }
 
 func parseSourceRef(input string) SourceRef {
+	if len(input) == 8 && input[0] == 'g' {
+		return SourceRef{
+			CommitHash: input[1:],
+			ScmPrefix:  string(input[0]),
+			RawRef:     input,
+		}
+	}
 	return SourceRef{
-		CommitHash: input[1:],
-		ScmPrefix:  string(input[0]),
-		RawRef:     input,
+		RawRef: input,
 	}
 }
 
@@ -36,13 +41,13 @@ func ParseTrunkVer(input string) (*TrunkVer, error) {
 
 	ts, err2 := time.Parse("20060102150405", strconv.FormatUint(ver.Major(), 10))
 	if err2 != nil {
-		return tryParsePreelaseVersion(ver)
+		return tryParsePrerelaseVersion(ver)
 	}
 
 	return tryParseMajorVersion(ver, ts)
 }
 
-func tryParsePreelaseVersion(ver *semver.Version) (*TrunkVer, error) {
+func tryParsePrerelaseVersion(ver *semver.Version) (*TrunkVer, error) {
 	prereleaseParts := strings.Split(ver.Prerelease(), "-")
 
 	ts, err := time.Parse("20060102150405", prereleaseParts[0])

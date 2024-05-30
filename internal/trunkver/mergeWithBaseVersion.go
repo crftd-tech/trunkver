@@ -4,7 +4,7 @@ import (
 	"github.com/Masterminds/semver/v3"
 )
 
-func MergeWithBaseVersion(baseVersion string, trunkVer string) string {
+func MergeWithBaseVersion(baseVersion string, prereleaseTrunkVer string) string {
 	if baseVersion[0] == 'v' {
 		baseVersion = baseVersion[1:]
 	}
@@ -14,7 +14,7 @@ func MergeWithBaseVersion(baseVersion string, trunkVer string) string {
 	}
 
 	var newVersion semver.Version
-	newVersion, err = semverBaseVersion.SetPrerelease(trunkVer)
+	newVersion, err = semverBaseVersion.SetPrerelease(prereleaseTrunkVer)
 	if err != nil {
 		panic(err)
 	}
