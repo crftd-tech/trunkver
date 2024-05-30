@@ -106,6 +106,20 @@ tests:
     stdout: |
       20240522142548-g1234567-R4242
 
+  - name: generate/prerelease-stdin
+    stdin: "v1.2.3"
+    args:
+      - generate
+      - --timestamp
+      - "2024-05-22T16:25:48+02:00"
+      - --source-ref
+      - "g1234567"
+      - --build-ref
+      - "R4242"
+      - --prerelease
+    stdout: |
+      1.2.3-20240522142548-g1234567-R4242
+
   - name: generate/prerelease/coerces-into-semver
     args:
       - generate

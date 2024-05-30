@@ -1,8 +1,10 @@
 package cmd
 
 import (
+	"bufio"
 	"bytes"
 	"fmt"
+	"io"
 	"os"
 	"text/template"
 	"time"
@@ -59,10 +61,22 @@ var generateCmd = &cobra.Command{
 		var trunkVer string
 		if prerelease {
 			trunkVer = trunkver.GeneratePrereleaseTrunkver(parsedTime, sourceRef, buildRef)
+			var baseVersion string
+			if len(args) == 0 {
+				stdin := cmd.InOrStdin()
+				reader := bufio.NewReader(stdin)
+				inputBA, _, err := reader.ReadLine()
+				if err == nil {
+					baseVersion = string(inputBA)
+				} else if err != io.EOF {
+					panic(err)
+				}
+			} else {
+				baseVersion = args[0]
+			}
 
-			baseVersionProvided := len(args) > 0 && args[0] != ""
-			if baseVersionProvided {
-				trunkVer = trunkver.MergeWithBaseVersion(args[0], trunkVer)
+			if baseVersion != "" {
+				trunkVer = trunkver.MergeWithBaseVersion(baseVersion, trunkVer)
 			}
 		} else {
 			trunkVer = trunkver.GenerateMajorTrunkver(parsedTime, sourceRef, buildRef)
