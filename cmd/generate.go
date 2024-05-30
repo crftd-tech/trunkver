@@ -49,31 +49,13 @@ var generateCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		var parsedTime time.Time
-		if timestamp == "now" {
-			parsedTime = time.Now()
-		} else {
-			parsedTime = internal.Must(time.Parse(time.RFC3339, timestamp))
-		}
+		var parsedTime = parseRFC3339OrNow(timestamp)
 
 		var trunkVer string
 
 		if prerelease {
 			trunkVer = trunkver.GeneratePrereleaseTrunkver(parsedTime, sourceRef, buildRef)
-			var baseVersion string
-			if len(args) == 0 {
-				stdin := cmd.InOrStdin()
-				reader := bufio.NewReader(stdin)
-				inputBA, _, err := reader.ReadLine()
-				if err == nil {
-					baseVersion = string(inputBA)
-				} else if err != io.EOF {
-					panic(err)
-				}
-			} else {
-				baseVersion = args[0]
-			}
-
+			var baseVersion = readBaseVersionFromArgsOrStdin(cmd.InOrStdin(), args)
 			if baseVersion != "" {
 				trunkVer = trunkver.MergeWithBaseVersion(baseVersion, trunkVer)
 			}
@@ -82,10 +64,7 @@ var generateCmd = &cobra.Command{
 		}
 
 		if format := cmd.Flags().Lookup("format").Value.String(); format != "" {
-			var tpl = template.Must(template.New("trunkver").Parse(format))
-			var buffer bytes.Buffer
-			internal.Must(tpl.Execute(&buffer, trunkVer), nil)
-			trunkVer = buffer.String()
+			trunkVer = templateTrunkVer(trunkVer, format)
 		}
 
 		fmt.Println(trunkVer)
@@ -104,4 +83,37 @@ func init() {
 	generateCmd.Flags().BoolP("prerelease", "p", false, "Build the TrunkVer as the prerelease part of a semver (e.g. for nightly builds)")
 
 	rootCmd.AddCommand(generateCmd)
+}
+
+func parseRFC3339OrNow(timestamp string) time.Time {
+	if timestamp == "now" {
+		return time.Now()
+	}
+	return internal.Must(time.Parse(time.RFC3339, timestamp))
+
+}
+
+func readBaseVersionFromArgsOrStdin(stdin io.Reader, args []string) string {
+	var baseVersion string
+	if len(args) == 1 {
+		if args[0] == "-" {
+			reader := bufio.NewReader(stdin)
+			inputBA, _, err := reader.ReadLine()
+			if err == nil {
+				baseVersion = string(inputBA)
+			} else if err != io.EOF {
+				panic(err)
+			}
+		} else {
+			baseVersion = args[0]
+		}
+	}
+	return baseVersion
+}
+
+func templateTrunkVer(trunkVer, format string) string {
+	var tpl = template.Must(template.New("trunkver").Parse(format))
+	var buffer bytes.Buffer
+	internal.Must(tpl.Execute(&buffer, trunkVer), nil)
+	return buffer.String()
 }

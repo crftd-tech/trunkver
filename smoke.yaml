@@ -118,6 +118,7 @@ tests:
       - --build-ref
       - "R4242"
       - --prerelease
+      - "-"
     stdout: |
       1.2.3-20240522142548-g1234567-R4242
 
