@@ -9,15 +9,17 @@ import (
 	"text/template"
 	"time"
 
+	"github.com/crftd-tech/trunkver/internal"
 	"github.com/crftd-tech/trunkver/internal/ci"
 	"github.com/crftd-tech/trunkver/internal/trunkver"
 	"github.com/spf13/cobra"
 )
 
 var generateCmd = &cobra.Command{
-	Use:     "generate",
+	Use:     "generate [flags] [base-version | -]",
 	Aliases: []string{"gen", "g"},
 	Short:   "Generate a new TrunkVer",
+	Long:    `Generates a new TrunkVer, optionally appending it to base-version as the prerelease part (if --prerelease).`,
 	Args:    cobra.MaximumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		var buildRef string = cmd.Flags().Lookup("build-ref").Value.String()
@@ -51,14 +53,11 @@ var generateCmd = &cobra.Command{
 		if timestamp == "now" {
 			parsedTime = time.Now()
 		} else {
-			var err error
-			parsedTime, err = time.Parse(time.RFC3339, timestamp)
-			if err != nil {
-				panic(err)
-			}
+			parsedTime = internal.Must(time.Parse(time.RFC3339, timestamp))
 		}
 
 		var trunkVer string
+
 		if prerelease {
 			trunkVer = trunkver.GeneratePrereleaseTrunkver(parsedTime, sourceRef, buildRef)
 			var baseVersion string
@@ -85,17 +84,13 @@ var generateCmd = &cobra.Command{
 		if format := cmd.Flags().Lookup("format").Value.String(); format != "" {
 			var tpl = template.Must(template.New("trunkver").Parse(format))
 			var buffer bytes.Buffer
-			if err := tpl.Execute(&buffer, trunkVer); err != nil {
-				panic(err)
-			}
+			internal.Must(tpl.Execute(&buffer, trunkVer), nil)
 			trunkVer = buffer.String()
 		}
 
 		fmt.Println(trunkVer)
 		if fileOutput != "" {
-			if err := os.WriteFile(fileOutput, []byte(trunkVer+"\n"), 0644); err != nil {
-				panic(err)
-			}
+			internal.Must(os.WriteFile(fileOutput, []byte(trunkVer+"\n"), 0644), nil)
 		}
 	},
 }

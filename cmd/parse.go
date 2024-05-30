@@ -6,50 +6,36 @@ import (
 	"fmt"
 	"text/template"
 
+	"github.com/crftd-tech/trunkver/internal"
 	"github.com/crftd-tech/trunkver/internal/trunkver"
 	"github.com/spf13/cobra"
 )
 
 var parseCmd = &cobra.Command{
-	Use:     "parse",
+	Use:     "parse [flags] [trunkver | -]",
+	Long:    `Parses a TrunkVer and outputs it as JSON. If a format string is provided, it will be used instead.`,
 	Aliases: []string{"p"},
 	Short:   "Parse a TrunkVer",
-	Args:    cobra.MaximumNArgs(1),
+	Args:    cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		var inputString string
 
-		if len(args) > 0 {
-			var err error
-			inputString = args[0]
-			if err != nil {
-				panic(err)
-			}
-		} else {
+		if args[0] == "-" {
 			reader := bufio.NewReader(cmd.InOrStdin())
-			inputBA, _, err := reader.ReadLine()
+			inputBA, _ := internal.Must2(reader.ReadLine())
 			inputString = string(inputBA)
-			if err != nil {
-				panic(err)
-			}
+		} else {
+			inputString = args[0]
 		}
 
-		version, err := trunkver.ParseTrunkVer(inputString)
-		if err != nil {
-			panic(err)
-		}
+		version := internal.Must(trunkver.ParseTrunkVer(inputString))
 
 		if format, _ := cmd.Flags().GetString("format"); format != "" {
 			tpl := template.Must(template.New("trunkver").Parse(format))
-			err := tpl.Execute(cmd.OutOrStdout(), version)
-			if err != nil {
-				panic(err)
-			}
+			internal.Must(tpl.Execute(cmd.OutOrStdout(), version), nil)
 			fmt.Fprintln(cmd.OutOrStdout())
 		} else {
-			jsonStr, err := json.Marshal(version)
-			if err != nil {
-				panic(err)
-			}
+			jsonStr := internal.Must(json.Marshal(version))
 			fmt.Fprintln(cmd.OutOrStdout(), string(jsonStr))
 		}
 	},

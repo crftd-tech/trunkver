@@ -10,9 +10,8 @@ import (
 
 var rootCmd = &cobra.Command{
 	Version: internal.Version,
-	Use:     "trunkver [flags] [base-version]",
+	Use:     "trunkver [flags]",
 	Short:   "trunkver generates versions for trunk-based apps",
-	
 }
 
 func init() {
