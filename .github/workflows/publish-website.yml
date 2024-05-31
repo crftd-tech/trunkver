@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - "website/**"
+      - ".github/workflows/publish-website.yml"
   workflow_dispatch:
 
 permissions:
