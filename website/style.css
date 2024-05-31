@@ -110,7 +110,7 @@ blockquote {
   }
 }
 .hero {
-  padding: 5px;
+  padding: 20px 20px;
   background-color: #f4f4f4;
   border-radius: 0.5em;
   font-size: 2em;
@@ -126,7 +126,7 @@ blockquote {
   a:visited {
     color: #ff9e40;
     font-style: unset;
-    text-decoration-color: #ccc;
+    text-decoration-color: #aaa;
     text-decoration-style: dotted;
   }
 
@@ -140,7 +140,8 @@ blockquote {
   .description {
     font-style: italic;
     font-size: 0.5em;
-    padding-bottom: 0.5em;
+    padding-top: 0.25em;
+    padding-bottom: 0.25em;
     color: #3f3f3f;
   }
   .code {

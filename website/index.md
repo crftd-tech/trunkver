@@ -12,11 +12,9 @@ so we can stop talking about versions and start shipping.
 ## TL;DR
 
 `TrunkVer` is a SemVer-compatible versioning scheme for
-trunk-based applications and systems that don't follow a release scheme.
+continuously-delivered, trunk-based applications and systems that don't follow a release scheme.
 
-It removes the chore of manually bumping version numbers and instead
-enriches the version number with three important data points: The
-**when**, **what** and **how**.
+It is a **drop-in replacement** for semantic versions and replaces the version with meaningful meta data, telling you at a glance what the artifact is, when it was built and where you may find the build log.
 
 ## Usage
 
@@ -63,4 +61,3 @@ chmod +x trunkver
 - [https://github.com/crftd-tech/trunkver](https://github.com/crftd-tech/trunkver)
 - [https://crftd.tech/](https://crftd.tech/)
 - [https://semver.org](https://semver.org)
-
