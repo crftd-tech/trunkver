@@ -55,10 +55,11 @@ h1 {
   display: inline;
 }
 
-li h1,
-li h2,
-li h3 {
-  display: inline;
+h2 {
+  margin-top: 80px;
+  @media screen and (max-width: 1000px) {
+    margin-top: 40px;
+  }
 }
 
 .spacer {
