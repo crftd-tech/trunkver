@@ -8,15 +8,13 @@ on:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  deploy:
+  build:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -30,9 +28,9 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v2
         with:
-          node-version-file: './website/.nvmrc'
-          cache: 'npm'
-          cache-dependency-path: './website/package-lock.json'
+          node-version-file: "./website/.nvmrc"
+          cache: "npm"
+          cache-dependency-path: "./website/package-lock.json"
       - name: Generate trunkver
         id: trunkver
         uses: crftd-tech/trunkver@main
@@ -44,15 +42,26 @@ jobs:
       - name: Build website
         run: npm run build
 
-      - name: Setup Pages
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        uses: actions/configure-pages@v5
       - name: Upload artifact
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'website/_site/'
+          path: "website/_site/"
+
+  deploy:
+    needs: [build]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
       - name: Deploy to GitHub Pages
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         id: deployment
         uses: actions/deploy-pages@v4
