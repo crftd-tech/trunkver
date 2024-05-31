@@ -2,7 +2,8 @@ name: Deploy static content to Pages
 
 on:
   push:
-    branches: ["main"]
+    paths:
+      - "website/**"
   workflow_dispatch:
 
 permissions:
@@ -32,8 +33,6 @@ jobs:
           node-version-file: './website/.nvmrc'
           cache: 'npm'
           cache-dependency-path: './website/package-lock.json'
-
-
       - name: Generate trunkver
         id: trunkver
         uses: crftd-tech/trunkver@main
@@ -46,11 +45,14 @@ jobs:
         run: npm run build
 
       - name: Setup Pages
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: actions/configure-pages@v5
       - name: Upload artifact
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: actions/upload-pages-artifact@v3
         with:
           path: 'website/_site/'
       - name: Deploy to GitHub Pages
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         id: deployment
         uses: actions/deploy-pages@v4
