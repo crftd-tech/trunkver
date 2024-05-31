@@ -48,7 +48,7 @@ jobs:
       - name: Create release
         id: release
         uses: softprops/action-gh-release@v1
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main'
         with:
           name: ${{ needs.generate-version.outputs.trunkver }}
           tag_name: ${{ needs.generate-version.outputs.trunkver }}
@@ -81,13 +81,13 @@ jobs:
         uses: docker/build-push-action@ca052bb54ab0790a636c9b5f226502c73d547a25
         with:
           context: .
-          push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+          push: ${{ github.ref == 'refs/heads/main' }}
           build-args: |
             VERSION=${{ needs.generate-version.outputs.trunkver }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
       - name: Update the action.yml with the new image tag
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main'
         run: |
           yq eval --inplace '.runs.image = "docker://ghcr.io/crftd-tech/trunkver:${{ needs.generate-version.outputs.trunkver }}"' action.yml
           git config --global user.email "bot@crftd.tech"
