@@ -87,11 +87,9 @@ The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL 
 
 7. The **build reference** identifies the exact build job used to build the artifact. Identifiers MUST comprise only ASCII alphanumerics and hyphens `[0-9A-Za-z-]`.
 
-8. The TrunkVer may be assembled in two formats: As a Major TrunkVer, or as a Prerelease Trunkver.
+8. A TrunkVer is formatted as follows: The **timestamp**, followed by `.0.0-`, followed by the **source reference**, followed by `-`, followed by the **build reference**. It may be used to replace any SemVer version.
 
-9. A Major TrunkVer is formatted as follows: The **timestamp**, followed by `.0.0-`, followed by the **source reference**, followed by `-`, followed by the **build reference**. It may be used to replace any SemVer version.
-
-10. A Prerelease TrunkVer is formatted as follows: The **timestamp**, followed by `-`, followed by the **source reference**, followed by `-`, followed by the **build reference**. It may be used as the Prerelease part of an artifact that IS versioned using SemVer, for the purpose of providing trunk-released prerelease versions.
+9. Alternatively, for the purpose of e.g. prereleases of an otherwise SemVer-versioned artifact, a TrunkVer may be assembled into the prerelease part of a SemVer version as follows: The **timestamp**, followed by `-`, followed by the **source reference**, followed by `-`, followed by the **build reference**. 
 
 ### EBNF Definition
 
