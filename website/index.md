@@ -32,6 +32,25 @@ It is a **drop-in replacement** for semantic versions and replaces the version w
     echo "$TRUNKVER"
 ```
 
+### GitLab
+
+#### Using our template from https://gitlab.com/crftd-tech/trunkver-gitlab-ci
+
+```yaml
+include:
+- remote: 'https://gitlab.com/crftd-tech/trunkver-gitlab-ci/-/raw/main/trunkver.gitlab-ci.yml'
+```
+
+#### Downloading the CLI directly
+
+```yaml
+build:
+  script:
+    - curl -sSL https://github.com/crftd-tech/trunkver/releases/latest/download/trunkver_linux_amd64 -o trunkver
+    - chmod +x trunkver
+    - export TRUNKVER=$(./trunkver generate)
+```
+
 ### Docker
 
 ```sh
