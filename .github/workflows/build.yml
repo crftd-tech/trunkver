@@ -5,6 +5,7 @@ on:
   push:
     paths-ignore:
       - "action.yml"
+      - "README.md"
       - "website/**"
 
 permissions:
