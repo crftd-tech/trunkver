@@ -5,5 +5,15 @@
   ],
   "dependencyDashboard": true,
   "automerge": true,
-  "automergeType": "branch"
+  "automergeType": "branch",
+  "packageRules": [
+    {
+      "matchPackageNames": [
+        "mcr.microsoft.com/devcontainers/go",
+        "golang",
+        "go"
+      ],
+      "groupName": "go"
+    }
+  ]
 }
