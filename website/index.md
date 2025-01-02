@@ -102,7 +102,7 @@ The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL 
 
 5. The **timestamp** is precise to one second and always formatted in UTC i.e. `YYYYMMDDHHMMSS`, e.g. `20241230142105`. It replaces the **Major** part of a SemVer.
 
-6. The **source reference** identifies the exact source code used to build the artifact. Identifiers MUST comprise only ASCII alphanumerics `[0-9A-Za-z]`. Identifiers MUST NOT be empty. If the source reference is a git commit checksum, it may be truncated to 7 characters (`--short`) and be prefixed with a `g`.
+6. The **source reference** identifies the exact source code used to build the artifact. Identifiers MUST comprise only ASCII alphanumerics `[0-9A-Za-z]`. Identifiers MUST NOT be empty. If the source reference is a git commit checksum, it may be truncated  (e.g. by using `git rev-parse --short HEAD`) and be prefixed with a `g` (as customary when using `git describe`).
 
 7. The **build reference** identifies the exact build job used to build the artifact. Identifiers MUST comprise only ASCII alphanumerics and hyphens `[0-9A-Za-z-]`.
 
