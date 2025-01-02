@@ -95,4 +95,5 @@ jobs:
           git config --global user.name "crftd-bot"
           git add action.yml
           git commit -m "chore: Bump image tag in action.yml"
-          git push
+          git pull origin --rebase
+          git push origin
