@@ -29,4 +29,5 @@ jobs:
             echo "No change to README.md, exiting successful"
             exit 0
           fi
+          git pull origin
           git push
