@@ -114,19 +114,17 @@ The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL 
 
 ```ebnf
 TRUNKVER = ( MAJOR_TRUNKVER | PRERELEASE_TRUNKVER );
-MAJOR_TRUNKVER = TIMESTAMP, '.0.0-', BUILD_REF, '-', SOURCE_REF;
-MINOR_TRUNKVER = TIMESTAMP, '-', BUILD_REF, '-', SOURCE_REF;
+MAJOR_TRUNKVER = TIMESTAMP, '.0.0-', SOURCE_REF, '-', BUILD_REF;
+PRERELEASE_TRUNKVER = TIMESTAMP, '-', SOURCE_REF, '-', BUILD_REF;
 
 TIMESTAMP = NON_ZERO_DIGIT, 11*DIGIT;
-SOURCE_REF = GIT_COMMIT_REF | { ALPHANUMERIC };
-GIT_COMMIT_REF = 'g', HEXADECIMAL;
 BUILD_REF = { ALPHANUMERIC | '-' };
-
+SOURCE_REF = { ALPHANUMERIC };
 
 DIGIT = "0" | NON_ZERO_DIGIT;
 NON_ZERO_DIGIT = "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9";
 HEXADECIMAL = "a" | "b" | "c" | "d" | "e" | "f" | "A" | "B" | "C" | "D" | "E" | "F" | "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9";
-ALPHANUMERIC = "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j" | "k" | "l" | "m" | "n" | "o" | "p" | "q" | "r" | "s" | "t" | "u" | "v" | "w" | "x" | "y" | "z" | "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z";
+ALPHANUMERIC = DIGIT | "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j" | "k" | "l" | "m" | "n" | "o" | "p" | "q" | "r" | "s" | "t" | "u" | "v" | "w" | "x" | "y" | "z" | "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | "U" | "V" | "W" | "X" | "Y" | "Z";
 
 ```
 
