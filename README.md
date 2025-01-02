@@ -4,10 +4,9 @@ so we can stop talking about versions and start shipping.
 
 ## TL;DR
 
-`TrunkVer` is a SemVer-compatible versioning scheme for
-continuously-delivered, trunk-based applications and systems that don't follow a release scheme.
+`TrunkVer` is a versioning scheme for continuously-delivered, trunk-based applications and systems that don't follow a release scheme.
 
-It is a **drop-in replacement** for semantic versions and replaces the version with meaningful meta data, telling you at a glance what the artifact is, when it was built and where you may find the build log.
+It is a syntax-compatible **drop-in replacement** for SemVer and replaces the version with meaningful meta data, telling you at a glance what the artifact is, when it was built and where you may find the build log.
 
 ## Usage
 
@@ -31,7 +30,7 @@ It is a **drop-in replacement** for semantic versions and replaces the version w
 
 ```yaml
 include:
-- remote: 'https://gitlab.com/crftd-tech/trunkver-gitlab-ci/-/raw/main/trunkver.gitlab-ci.yml'
+  - remote: "https://gitlab.com/crftd-tech/trunkver-gitlab-ci/-/raw/main/trunkver.gitlab-ci.yml"
 ```
 
 #### Downloading the CLI directly
@@ -95,13 +94,13 @@ The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL 
 
 5. The **timestamp** is precise to one second and always formatted in UTC i.e. `YYYYMMDDHHMMSS`, e.g. `20241230142105`. It replaces the **Major** part of a SemVer.
 
-6. The **source reference** identifies the exact source code used to build the artifact. Identifiers MUST comprise only ASCII alphanumerics `[0-9A-Za-z]`. Identifiers MUST NOT be empty. If the source reference is a git commit checksum, it may be truncated  (e.g. by using `git rev-parse --short HEAD`) and be prefixed with a `g` (as customary when using `git describe`).
+6. The **source reference** identifies the exact source code used to build the artifact. Identifiers MUST comprise only ASCII alphanumerics `[0-9A-Za-z]`. Identifiers MUST NOT be empty. If the source reference is a git commit checksum, it may be truncated (e.g. by using `git rev-parse --short HEAD`) and be prefixed with a `g` (as customary when using `git describe`).
 
 7. The **build reference** identifies the exact build job used to build the artifact. Identifiers MUST comprise only ASCII alphanumerics and hyphens `[0-9A-Za-z-]`.
 
 8. A TrunkVer is formatted as follows: The **timestamp**, followed by `.0.0-`, followed by the **source reference**, followed by `-`, followed by the **build reference**. It may be used to replace any SemVer version.
 
-9. Alternatively, for the purpose of e.g. prereleases of an otherwise SemVer-versioned artifact, a TrunkVer may be assembled into the prerelease part of a SemVer version as follows: The **timestamp**, followed by `-`, followed by the **source reference**, followed by `-`, followed by the **build reference**. 
+9. Alternatively, for the purpose of e.g. prereleases of an otherwise SemVer-versioned artifact, a TrunkVer may be assembled into the prerelease part of a SemVer version as follows: The **timestamp**, followed by `-`, followed by the **source reference**, followed by `-`, followed by the **build reference**.
 
 ### EBNF Definition
 
@@ -124,12 +123,22 @@ ALPHANUMERIC = DIGIT | "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j"
 ## FAQ
 
 - **Why only use the MAJOR SemVer part as a timestamp?**  
-  Tools (e.g. compliance, audit trails) might still classify a version based on SemVer semantics, hence TrunkVer always defensively implies breaking changes between versions.
+  Tools (e.g. compliance, audit trails) might still classify a version based on SemVer semantics, hence TrunkVer always defensively implies breaking changes between versions. If necessary (or pragmatic), you may use TrunkVer to generate the PRERELEASE part only instead, e.g. `20250102141131-g39d0b59-12583705231-1` (as in <code>1.0.5-<strong>20250102141131-g39d0b59-12583705231-1</strong></code>). See the next question on where this is appropriate.
+
+- **Can I use TrunkVer for an artifact that requires the version to convey compatibility information?**  
+  No, actually use [SemVer](https://semver.org) for that. You may use trunkver to create unique PRERELEASE parts for builds, etc. For example, we plan on releasing a stable version `1.0.0` of TrunkVer eventually. Until then, we provide the "latest" version as a prerelease in the SemVer sense, e.g. `1.0.0-20250102141131-g39d0b59-12583705231-1`.
 
 - **Why do you use the PRERELEASE SemVer part for source information and not BUILD?**  
   Because OCI tags don't support `+` (see [distribution/distribution#1201](https://github.com/distribution/distribution/issues/1201) and [opencontainers/distribution-spec#154](https://github.com/opencontainers/distribution-spec/issues/154). We'd rather have one consistent version across artifacts. Semantically, the only relevant portion for sorting of a TrunkVer is
   the MAJOR version, and a conflict (as in creating two artifacts in the
   very same second) should be avoided.
+
+- **Why do you not include the timezone in the timestamp?**  
+  Because "Z" will make the version syntax-incompatible with SemVer. TrunkVer timestamps are always in **UTC**.
+
+## Prior Art
+
+- [Sam's Versioning: Samver](https://samver.org/)
 
 ## Links
 
