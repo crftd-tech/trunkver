@@ -31,6 +31,10 @@ test:
 clean:
 	rm -rf out
 
+README.md: website/index.md README.md.head
+	cp README.md.head $@
+	sed '1,/{% # CUT FOR README %}/d' website/index.md >> $@
+
 out:
 	@mkdir -p out || true
 

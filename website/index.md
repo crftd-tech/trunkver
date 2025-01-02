@@ -9,6 +9,8 @@ so we can stop talking about versions and start shipping.
 <div class="spacer"></div>
 {% include 'hero.html' %}
 
+{% # CUT FOR README %}
+
 ## TL;DR
 
 `TrunkVer` is a SemVer-compatible versioning scheme for
