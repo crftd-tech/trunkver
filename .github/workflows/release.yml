@@ -43,6 +43,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
       - name: Update the action.yml with the new image tag
         run: |
+          git pull origin --ff-only
           yq eval --inplace '.runs.image = "docker://ghcr.io/crftd-tech/trunkver:${{ github.event.inputs.version }}"' action.yml
           git config --global user.email "bot@crftd.tech"
           git config --global user.name "crftd-bot"
