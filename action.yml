@@ -13,6 +13,10 @@ inputs:
     description: Whether to generate the prerelease part of a SemVer
     required: false
     default: "false"
+  increment:
+    description: Increment the given part of a base version
+    required: false
+    default: ""
 outputs:
   trunkver:
     description: The TrunkVer
@@ -25,4 +29,4 @@ runs:
     - -o
     - pipefail
     - -c
-    - /trunkver generate "--prerelease=${{ inputs.prerelease }}" "--output=${GITHUB_OUTPUT}" "--format=trunkver={{ . }}" "${{ inputs.baseVersion }}"
+    - /trunkver generate "--prerelease=${{ inputs.prerelease }}" "--increment=${{ inputs.increment }}" "--output=${GITHUB_OUTPUT}" "--format=trunkver={{ . }}" "${{ inputs.baseVersion }}"

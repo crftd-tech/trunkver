@@ -33,6 +33,7 @@ jobs:
         with:
           baseVersion: ${{ fromJson(steps.get_latest_release.outputs.data).tag_name }}
           prerelease: "true"
+          increment: "patch"
 
   build-release:
     runs-on: ubuntu-latest
