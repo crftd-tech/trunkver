@@ -60,6 +60,7 @@ jobs:
         with:
           name: ${{ needs.generate-version.outputs.trunkver }}
           tag_name: ${{ needs.generate-version.outputs.trunkver }}
+          prerelease: true
           files: |
             out/trunkver*
 
