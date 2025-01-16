@@ -20,11 +20,18 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      - uses: octokit/request-action@v2.x
+        id: get_latest_release
+        with:
+          route: GET /repos/{repo}/releases/latest
+          repo: ${{ github.repository }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}        
       - name: Generate trunkver
         id: trunkver
         uses: crftd-tech/trunkver@main
         with:
-          baseVersion: "1.0.0"
+          baseVersion: ${{ fromJson(steps.get_latest_release.outputs.data).tag_name }}
           prerelease: "true"
 
   build-release:
