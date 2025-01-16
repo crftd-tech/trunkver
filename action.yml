@@ -1,4 +1,4 @@
-name: TrunkVer
+name: Generate a Trunkver
 description: Create a TrunkVer for this github action run
 author: crftd.tech
 inputs:
