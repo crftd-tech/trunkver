@@ -39,6 +39,7 @@ jobs:
           context: .
           build-args: |
             VERSION=${{ github.event.inputs.version }}
+          push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
       - name: Update the action.yml with the new image tag
