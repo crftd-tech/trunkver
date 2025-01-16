@@ -98,6 +98,7 @@ jobs:
       - name: Update the action.yml with the new image tag
         if: github.ref == 'refs/heads/main'
         run: |
+          git pull origin --ff-only
           yq eval --inplace '.runs.image = "docker://ghcr.io/crftd-tech/trunkver:${{ needs.generate-version.outputs.trunkver }}"' action.yml
           git config --global user.email "bot@crftd.tech"
           git config --global user.name "crftd-bot"
