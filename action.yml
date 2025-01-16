@@ -3,7 +3,7 @@ description: Create a TrunkVer for this github action run
 author: crftd.tech
 branding:
   color: orange
-  icon: fast-forward 
+  icon: fast-forward
 inputs:
   baseVersion:
     description: The base version to use (only if prerelease is true)
@@ -18,7 +18,7 @@ outputs:
     description: The TrunkVer
 runs:
   using: docker
-  image: 'docker://ghcr.io/crftd-tech/trunkver:1.0.0-20250116155819-g0c11e7a-12812707819-1'
+  image: 'docker://ghcr.io/crftd-tech/trunkver:1.0.0-20250116162003-gccf62f9-12813121559-1'
   entrypoint: /bin/sh
   args:
     - -xeu
