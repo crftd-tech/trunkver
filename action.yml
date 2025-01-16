@@ -1,6 +1,9 @@
 name: Generate a Trunkver
 description: Create a TrunkVer for this github action run
 author: crftd.tech
+branding:
+  color: orange
+  icon: fast-forward 
 inputs:
   baseVersion:
     description: The base version to use (only if prerelease is true)
