@@ -9,6 +9,7 @@ import (
 	"text/template"
 	"time"
 
+	"github.com/Masterminds/semver/v3"
 	"github.com/crftd-tech/trunkver/internal"
 	"github.com/crftd-tech/trunkver/internal/ci"
 	"github.com/crftd-tech/trunkver/internal/trunkver"
@@ -26,6 +27,7 @@ var generateCmd = &cobra.Command{
 		var sourceRef string = cmd.Flags().Lookup("source-ref").Value.String()
 		var timestamp string = cmd.Flags().Lookup("timestamp").Value.String()
 		var prerelease bool = cmd.Flags().Lookup("prerelease").Value.String() == "true"
+		var incrementBaseVersionPart string = cmd.Flags().Lookup("increment").Value.String()
 		var fileOutput string = cmd.Flags().Lookup("output").Value.String()
 
 		ciResult, found := ci.DetectCi()
@@ -57,6 +59,10 @@ var generateCmd = &cobra.Command{
 			trunkVer = trunkver.GeneratePrereleaseTrunkver(parsedTime, sourceRef, buildRef)
 			var baseVersion = readBaseVersionFromArgsOrStdin(cmd.InOrStdin(), args)
 			if baseVersion != "" {
+				baseVersion = removeVPrefixIfPresent(baseVersion)
+				if incrementBaseVersionPart != "" {
+					baseVersion = incBaseVersion(baseVersion, incrementBaseVersionPart)
+				}
 				trunkVer = trunkver.MergeWithBaseVersion(baseVersion, trunkVer)
 			}
 		} else {
@@ -74,12 +80,37 @@ var generateCmd = &cobra.Command{
 	},
 }
 
+func removeVPrefixIfPresent(baseVersion string) string {
+	if baseVersion[0] == 'v' {
+		return baseVersion[1:]
+	}
+	return baseVersion
+}
+func incBaseVersion(baseVersion string, inc string) string {
+	var semverBaseVersion, err = semver.NewVersion(baseVersion)
+	if err != nil {
+		panic(err)
+	}
+
+	switch inc {
+	case "major":
+		return semverBaseVersion.IncMajor().String()
+	case "minor":
+		return semverBaseVersion.IncMinor().String()
+	case "patch":
+		return semverBaseVersion.IncPatch().String()
+	default:
+		panic("Can't increment " + inc)
+	}
+}
+
 func init() {
 	generateCmd.Flags().StringP("build-ref", "b", "", "The build ref to use (e.g. $GITHUB_RUN_ID)")
 	generateCmd.Flags().StringP("source-ref", "s", "", "The source ref to use for the version (e.g. \"g$(git rev-parse --short HEAD)\")")
 	generateCmd.Flags().StringP("timestamp", "t", "now", "The timestamp to use for the version in RFC3339 format")
 	generateCmd.Flags().StringP("output", "o", "", "Write TrunkVer to file")
 	generateCmd.Flags().StringP("format", "f", "", "Use template to format TrunkVer")
+	generateCmd.Flags().StringP("increment", "i", "", "increment the specified version part when generating a prerelease with a given base version (can be patch, minor, major)")
 	generateCmd.Flags().BoolP("prerelease", "p", false, "Build the TrunkVer as the prerelease part of a semver (e.g. for nightly builds)")
 
 	rootCmd.AddCommand(generateCmd)

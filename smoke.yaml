@@ -164,6 +164,54 @@ tests:
     stdout: |
       0.1.0-20240522142548-g1234567-R4242
 
+  - name: generate/prerelease/with-inc-patch
+    args:
+      - generate
+      - --timestamp
+      - "2024-05-22T16:25:48+02:00"
+      - --source-ref
+      - "g1234567"
+      - --build-ref
+      - "R4242"
+      - --prerelease
+      - --increment
+      - "patch"
+      - "0.1.0"
+    stdout: |
+      0.1.1-20240522142548-g1234567-R4242
+
+  - name: generate/prerelease/with-inc-minor
+    args:
+      - generate
+      - --timestamp
+      - "2024-05-22T16:25:48+02:00"
+      - --source-ref
+      - "g1234567"
+      - --build-ref
+      - "R4242"
+      - --prerelease
+      - --increment
+      - "minor"
+      - "0.1.0"
+    stdout: |
+      0.2.0-20240522142548-g1234567-R4242
+
+  - name: generate/prerelease/with-inc-major
+    args:
+      - generate
+      - --timestamp
+      - "2024-05-22T16:25:48+02:00"
+      - --source-ref
+      - "g1234567"
+      - --build-ref
+      - "R4242"
+      - --prerelease
+      - --increment
+      - "major"
+      - "0.1.0"
+    stdout: |
+      1.0.0-20240522142548-g1234567-R4242
+
   - name: generate/panic/if-no-build-ref
     args:
       - generate
