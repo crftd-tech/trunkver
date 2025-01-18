@@ -22,7 +22,7 @@ outputs:
     description: The TrunkVer
 runs:
   using: docker
-  image: 'docker://ghcr.io/crftd-tech/trunkver:1.0.1-20250118104816-gd864de5-12843343220-1'
+  image: 'docker://ghcr.io/crftd-tech/trunkver:1.0.1-20250118172556-g39a78e0-12846023155-1'
   entrypoint: /bin/sh
   args:
     - -xeu
