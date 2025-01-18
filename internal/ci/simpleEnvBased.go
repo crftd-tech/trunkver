@@ -3,11 +3,15 @@ package ci
 import "os"
 
 type SimpleEnvBased struct {
-	Name         string
+	name         string
 	ScmPrefix    string
 	DetectKey    string
 	SourceRefKey string
 	BuildRefKey  string
+}
+
+func (g *SimpleEnvBased) Name() string {
+	return g.name
 }
 
 func (g *SimpleEnvBased) IsInUse() bool {

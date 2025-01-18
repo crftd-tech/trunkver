@@ -1,6 +1,7 @@
 package ci
 
 type CI interface {
+	Name() string
 	IsInUse() bool
 	Get() CIData
 }

@@ -7,6 +7,11 @@ import (
 type Github struct {
 }
 
+// Name implements CI.
+func (g *Github) Name() string {
+	return "Github"
+}
+
 func (g *Github) IsInUse() bool {
 	return os.Getenv("GITHUB_SHA") != ""
 }
@@ -14,7 +19,7 @@ func (g *Github) IsInUse() bool {
 func (g *Github) Get() CIData {
 	return CIData{
 		SourceRef: "g" + os.Getenv("GITHUB_SHA")[:7],
-		BuildRef:  os.Getenv("GITHUB_RUN_ID")+"-"+os.Getenv("GITHUB_RUN_ATTEMPT"),
+		BuildRef:  os.Getenv("GITHUB_RUN_ID") + "-" + os.Getenv("GITHUB_RUN_ATTEMPT"),
 	}
 }
 

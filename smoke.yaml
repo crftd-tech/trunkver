@@ -71,10 +71,12 @@ tests:
       - "g1234567"
       - --build-ref
       - "R4242"
+      - --verbose
       - --output
       - "out/output.txt"
-    stdout: |
-      20240522142548.0.0-g1234567-R4242
+    stderr: 
+      contains: |
+        Writing 20240522142548.0.0-g1234567-R4242 to out/output.txt
     files:
       - path: out/output.txt
         contents: |
@@ -93,10 +95,12 @@ tests:
       - "R4242"
       - --output
       - "out/output.txt"
+      - --verbose
       - --format
       - "trunkver={{ . }}"
-    stdout: |
-      trunkver=20240522142548.0.0-g1234567-R4242
+    stderr: 
+      contains: |
+        Writing trunkver=20240522142548.0.0-g1234567-R4242 to out/output.txt
     files:
       - path: out/output.txt
         contents: |
@@ -251,10 +255,14 @@ tests:
       GITHUB_RUN_ATTEMPT: "3"
     args:
       - generate
+      - --verbose
       - --timestamp
       - "2024-05-22T16:25:48+02:00"
     stdout: |
       20240522142548.0.0-g1234567-GITHUBRUN-3
+    stderr: 
+      contains: |
+        CI detected: Github
 
   - name: generate/ci/gitlab
     environment:
@@ -263,10 +271,14 @@ tests:
       CI_JOB_ID: GITLABRUN
     args:
       - generate
+      - --verbose
       - --timestamp
       - "2024-05-22T16:25:48+02:00"
     stdout: |
       20240522142548.0.0-g1234567-GITLABRUN
+    stderr: 
+      contains: |
+        CI detected: Gitlab
 
   - name: generate/ci/circleci
     environment:
@@ -275,7 +287,11 @@ tests:
       CIRCLE_WORKFLOW_JOB_ID: CIRCLECIJOB
     args:
       - generate
+      - --verbose
       - --timestamp
       - "2024-05-22T16:25:48+02:00"
     stdout: |
       20240522142548.0.0-g1234567-CIRCLECIJOB
+    stderr: 
+      contains: |
+        CI detected: CircleCI

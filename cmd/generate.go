@@ -12,6 +12,7 @@ import (
 	"github.com/Masterminds/semver/v3"
 	"github.com/crftd-tech/trunkver/internal"
 	"github.com/crftd-tech/trunkver/internal/ci"
+	"github.com/crftd-tech/trunkver/internal/log"
 	"github.com/crftd-tech/trunkver/internal/trunkver"
 	"github.com/spf13/cobra"
 )
@@ -32,6 +33,7 @@ var generateCmd = &cobra.Command{
 
 		ciResult, found := ci.DetectCi()
 		if found {
+			log.LogVerbose("CI detected: %s", ciResult.Name())
 			ciData := ciResult.Get()
 			if sourceRef == "" {
 				sourceRef = ciData.SourceRef
@@ -73,9 +75,11 @@ var generateCmd = &cobra.Command{
 			trunkVer = templateTrunkVer(trunkVer, format)
 		}
 
-		fmt.Println(trunkVer)
 		if fileOutput != "" {
+			log.LogVerbose("Writing %s to %s", trunkVer, fileOutput)
 			internal.Must(os.WriteFile(fileOutput, []byte(trunkVer+"\n"), 0644), nil)
+		} else {
+			fmt.Println(trunkVer)
 		}
 	},
 }
