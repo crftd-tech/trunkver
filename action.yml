@@ -29,4 +29,4 @@ runs:
     - -o
     - pipefail
     - -c
-    - /trunkver generate "--prerelease=${{ inputs.prerelease }}" "--increment=${{ inputs.increment }}" "--output=${GITHUB_OUTPUT}" "--format=trunkver={{ . }}" "${{ inputs.baseVersion }}"
+    - trunkver --verbose generate "--prerelease=${{ inputs.prerelease }}" "--increment=${{ inputs.increment }}" "--output=${GITHUB_OUTPUT}" "--format=trunkver={{ . }}" "${{ inputs.baseVersion }}"
