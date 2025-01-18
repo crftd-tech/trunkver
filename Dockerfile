@@ -17,5 +17,6 @@ RUN make test out/trunkver_linux_amd64 spec "VERSION=${VERSION}"
 FROM busybox
 
 COPY --from=builder /app/out/trunkver_linux_amd64 /trunkver
+RUN ln -s /trunkver /bin/trunkver
 
 ENTRYPOINT ["/trunkver"]
