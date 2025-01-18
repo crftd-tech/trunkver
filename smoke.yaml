@@ -1,4 +1,14 @@
 tests:
+  - name: parse/allow-longer-git-refs
+    args:
+      - parse
+      - "-"
+    stdin: "20240522142548.0.0-g443d4f7d22-R4242"
+    filter:
+      - jq
+      - .
+    stdout: |
+      {"timestamp":"2024-05-22T14:25:48Z","sourceRef":{"commitHash":"443d4f7d22","scmPrefix":"g","rawRef":"g443d4f7d22"},"buildRef":"R4242"}
   - name: parse/from-stdin
     args:
       - parse
