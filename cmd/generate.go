@@ -26,6 +26,7 @@ var generateCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		var buildRef string = cmd.Flags().Lookup("build-ref").Value.String()
 		var sourceRef string = cmd.Flags().Lookup("source-ref").Value.String()
+		var sourceRefMaxLength, _ = cmd.Flags().GetInt("source-ref-max-length")
 		var timestamp string = cmd.Flags().Lookup("timestamp").Value.String()
 		var prerelease bool = cmd.Flags().Lookup("prerelease").Value.String() == "true"
 		var incrementBaseVersionPart string = cmd.Flags().Lookup("increment").Value.String()
@@ -51,6 +52,10 @@ var generateCmd = &cobra.Command{
 		if sourceRef == "" {
 			fmt.Fprintln(os.Stderr, "Error: --source-ref missing, your CI might be unsupported. It should identify the commit that was used to build this artifact, e.g. \"g${GITHUB_SHA:0:7}\" or \"g$(git rev-parse --short HEAD)\".")
 			os.Exit(1)
+		}
+
+		if sourceRefMaxLength > 0 {
+			sourceRef = sourceRef[0:sourceRefMaxLength]
 		}
 
 		var parsedTime = parseRFC3339OrNow(timestamp)
@@ -111,6 +116,7 @@ func incBaseVersion(baseVersion string, inc string) string {
 func init() {
 	generateCmd.Flags().StringP("build-ref", "b", "", "The build ref to use (e.g. $GITHUB_RUN_ID)")
 	generateCmd.Flags().StringP("source-ref", "s", "", "The source ref to use for the version (e.g. \"g$(git rev-parse --short HEAD)\")")
+	generateCmd.Flags().IntP("source-ref-max-length", "", 8, "The length to truncate the source-ref to. Set to 0 to disable truncating.")
 	generateCmd.Flags().StringP("timestamp", "t", "now", "The timestamp to use for the version in RFC3339 format")
 	generateCmd.Flags().StringP("output", "o", "", "Write TrunkVer to file")
 	generateCmd.Flags().StringP("format", "f", "", "Use template to format TrunkVer")

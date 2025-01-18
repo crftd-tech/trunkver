@@ -20,7 +20,7 @@ func (g *SimpleEnvBased) IsInUse() bool {
 
 func (g *SimpleEnvBased) Get() CIData {
 	return CIData{
-		SourceRef: g.ScmPrefix + os.Getenv(g.SourceRefKey)[:7],
+		SourceRef: g.ScmPrefix + os.Getenv(g.SourceRefKey),
 		BuildRef:  os.Getenv(g.BuildRefKey),
 	}
 }

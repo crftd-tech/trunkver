@@ -62,6 +62,21 @@ tests:
     stdout: |
       20240522142548.0.0-g1234567-R4242
 
+  - name: generate/simple-with-longer-source-ref
+    args:
+      - generate
+      - --timestamp
+      - "2024-05-22T16:25:48+02:00"
+      - --source-ref-max-length
+      - "16"
+      - --source-ref
+      - "g12345678901234567890"
+      - --build-ref
+      - "R4242"
+    stdout: |
+      20240522142548.0.0-g123456789012345-R4242
+
+
   - name: generate/simple-output
     args:
       - generate

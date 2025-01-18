@@ -18,7 +18,7 @@ func (g *Github) IsInUse() bool {
 
 func (g *Github) Get() CIData {
 	return CIData{
-		SourceRef: "g" + os.Getenv("GITHUB_SHA")[:7],
+		SourceRef: "g" + os.Getenv("GITHUB_SHA"),
 		BuildRef:  os.Getenv("GITHUB_RUN_ID") + "-" + os.Getenv("GITHUB_RUN_ATTEMPT"),
 	}
 }
