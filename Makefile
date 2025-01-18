@@ -35,16 +35,15 @@ README.md: website/index.md README.md.head
 	cp README.md.head $@
 	sed '1,/{% # CUT FOR README %}/d' website/index.md >> $@
 
-out:
-	@mkdir -p out || true
-
 .PHONY: $(addprefix out/trunkver_, $(PLATFORMS))
-$(addprefix out/trunkver_, $(PLATFORMS)): out test
+$(addprefix out/trunkver_, $(PLATFORMS)): test
+	@mkdir -p out || true
 	GOOS=$(word 2,$(subst _, ,$@)) \
 	  GOARCH=$(word 3,$(subst _, ,$@)) \
 	  go build -ldflags "-X github.com/crftd-tech/trunkver/internal.Version=$(VERSION)" -o $@ ./main.go
 
-out/smoke: out
+out/smoke: 
+	@mkdir -p out || true
 	curl -sL https://github.com/SamirTalwar/smoke/releases/download/v2.4.0/smoke-v2.4.0-$(SMOKE_PLATFORM) -o $@
 	chmod a+x $@
 
