@@ -34,6 +34,8 @@ clean:
 README.md: website/index.md README.md.head
 	cp README.md.head $@
 	sed '1,/{% # CUT FOR README %}/d' website/index.md >> $@
+	# Replace double escaped YAML substitution in GithubAction reference
+	sed -i "s/'{{ \(.*\) }}'/ \1 /" $@
 
 .PHONY: $(addprefix out/trunkver_, $(PLATFORMS))
 $(addprefix out/trunkver_, $(PLATFORMS)): test

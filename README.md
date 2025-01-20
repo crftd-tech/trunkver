@@ -19,7 +19,7 @@ It is a syntax-compatible **drop-in replacement** for SemVer and replaces the ve
 
 - name: Print trunkver
   env:
-    TRUNKVER: ${{'{{ steps.trunkver.outputs.trunkver }}'}}
+    TRUNKVER: ${{ steps.trunkver.outputs.trunkver }}
   run: |
     echo "$TRUNKVER"
 ```
