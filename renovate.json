@@ -15,7 +15,8 @@
       ],
       "overrideDatasource": "golang-version",
       "overridePackageName": "golang",
-      "groupName": "go"
+      "groupName": "go",
+      "rangeStrategy": "bump"
     }
   ]
 }
