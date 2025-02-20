@@ -13,6 +13,8 @@
         "golang",
         "go"
       ],
+      "overrideDatasource": "golang-version",
+      "overridePackageName": "golang",
       "groupName": "go"
     }
   ]
