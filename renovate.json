@@ -7,6 +7,10 @@
   "dependencyDashboard": true,
   "automerge": true,
   "automergeType": "branch",
+  "minimumReleaseAge": "30 days",
+  "vulnerabilityAlerts": {
+    "minimumReleaseAge": null
+  },
   "packageRules": [
     {
       "matchPackageNames": [
