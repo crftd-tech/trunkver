@@ -49,13 +49,13 @@ var generateCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
+		if sourceRefMaxLength > 0 {
+			sourceRef = sourceRef[0:min(len(sourceRef), sourceRefMaxLength)]
+		}
+
 		if sourceRef == "" {
 			fmt.Fprintln(os.Stderr, "Error: --source-ref missing, your CI might be unsupported. It should identify the commit that was used to build this artifact, e.g. \"g${GITHUB_SHA:0:7}\" or \"g$(git rev-parse --short HEAD)\".")
 			os.Exit(1)
-		}
-
-		if sourceRefMaxLength > 0 {
-			sourceRef = sourceRef[0:sourceRefMaxLength]
 		}
 
 		var parsedTime = parseRFC3339OrNow(timestamp)
