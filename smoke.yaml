@@ -103,16 +103,14 @@ tests:
       - "R4242"
       - --verbose
       - --output
-      - "out/output.txt"
+      - "/tmp/smoke_test_output.txt"
     stderr: 
       contains: |
-        Writing 20240522142548.0.0-g1234567-R4242 to out/output.txt
+        Writing 20240522142548.0.0-g1234567-R4242 to /tmp/smoke_test_output.txt
     files:
-      - path: out/output.txt
+      - path: /tmp/smoke_test_output.txt
         contents: |
           20240522142548.0.0-g1234567-R4242
-    revert:
-      - out
 
   - name: generate/formatted-output
     args:
@@ -124,19 +122,17 @@ tests:
       - --build-ref
       - "R4242"
       - --output
-      - "out/output.txt"
+      - "/tmp/smoke_test_output.txt"
       - --verbose
       - --format
       - "trunkver={{ . }}"
     stderr: 
       contains: |
-        Writing trunkver=20240522142548.0.0-g1234567-R4242 to out/output.txt
+        Writing trunkver=20240522142548.0.0-g1234567-R4242 to /tmp/smoke_test_output.txt
     files:
-      - path: out/output.txt
+      - path: /tmp/smoke_test_output.txt
         contents: |
           trunkver=20240522142548.0.0-g1234567-R4242
-    revert:
-      - out
 
   - name: generate/prerelease
     args:
