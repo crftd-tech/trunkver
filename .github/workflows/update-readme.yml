@@ -1,0 +1,33 @@
+name: Update README from Website
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "README.md.head"
+      - "Makefile"
+      - "website/**"
+
+permissions:
+  contents: write
+
+jobs:
+  update-README:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4
+      - run: make README.md
+      - name: Update README.md
+        if: github.ref == 'refs/heads/main'
+        run: |
+          git config --global user.email "bot@crftd.tech"
+          git config --global user.name "crftd-bot"
+          git add README.md
+          if ! git commit -m "chore: Update README from website/index.md";
+          then
+            echo "No change to README.md, exiting successful"
+            exit 0
+          fi
+          git pull origin --rebase
+          git push

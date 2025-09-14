@@ -2,6 +2,14 @@ name: Build and Push
 
 on:
   workflow_dispatch:
+    inputs:
+      version:
+        required: false
+        description: The version to release
+      prerelease:
+        type: boolean
+        default: true
+        description: If the version is a prerelease
   push:
     paths-ignore:
       - "action.yml"
@@ -18,10 +26,12 @@ jobs:
   generate-version:
     runs-on: ubuntu-latest
     outputs:
-      trunkver: ${{ steps.trunkver.outputs.trunkver }}
+      version: ${{ steps.pick-version.outputs.version }}
+      prerelease: ${{ steps.pick-prerelease.outputs.version }}
     steps:
       - name: Checkout code
         uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4
+
       - uses: octokit/request-action@dad4362715b7fb2ddedf9772c8670824af564f0d # v2.4.0
         id: get_latest_release
         with:
@@ -29,6 +39,7 @@ jobs:
           repo: ${{ github.repository }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Generate trunkver
         id: trunkver
         uses: crftd-tech/trunkver@ab47f5339878f5a7c0097e8f10e6eae13a0ba998 # v1.1.1
@@ -36,6 +47,23 @@ jobs:
           baseVersion: ${{ fromJson(steps.get_latest_release.outputs.data).tag_name }}
           prerelease: "true"
           increment: "patch"
+
+      - name: Workflow Version Trumps Trunkver
+        id: pick-version
+        env:
+          WORKFLOW_VERSION: ${{ github.event.inputs.version }}
+          WORKFLOW_PRERELEASE: ${{ github.event.inputs.prerelease }}
+          TRUNKVER_VERSION: ${{ steps.trunkver.outputs.trunkver }}
+        run: |
+          set -euxo pipefail
+          if ! [ -z "$WORKFLOW_VERSION" ];
+          then
+            echo "version=${WORKFLOW_VERSION}" | tee "$GITHUB_OUTPUT"
+            echo "prereleae=${WORKFLOW_PRERELEASE}" | tee -a "$GITHUB_OUTPUT"
+          else
+            echo "version=${TRUNKVER_VERSION}" | tee "$GITHUB_OUTPUT"
+            echo "prereleae=true" | tee -a "$GITHUB_OUTPUT"
+          fi
 
   test:
     runs-on: ubuntu-latest
@@ -49,7 +77,7 @@ jobs:
           go-version: 1.24
       - name: Build trunkver
         env:
-          VERSION: ${{ needs.generate-version.outputs.trunkver }}
+          VERSION: ${{ needs.generate-version.outputs.version }}
         run: |
           (
             unset GITHUB_SHA
@@ -94,7 +122,7 @@ jobs:
           go-version: 1.24
       - name: Build trunkver
         env:
-          VERSION: ${{ needs.generate-version.outputs.trunkver }}
+          VERSION: ${{ needs.generate-version.outputs.version }}
         run: |
           (
             unset GITHUB_SHA
@@ -105,9 +133,9 @@ jobs:
         id: release
         uses: softprops/action-gh-release@6cbd405e2c4e67a21c47fa9e383d020e4e28b836 # v2
         with:
-          name: ${{ needs.generate-version.outputs.trunkver }}
-          tag_name: ${{ needs.generate-version.outputs.trunkver }}
-          prerelease: true
+          name: ${{ needs.generate-version.outputs.version }}
+          tag_name: ${{ needs.generate-version.outputs.version }}
+          prerelease: ${{ needs.generate-version.outputs.prerelease }}
           files: |
             dist/*
       - name: Log in to the Container registry
@@ -123,7 +151,7 @@ jobs:
         with:
           images: ghcr.io/${{ github.repository }}
           tags: |
-            type=raw,value=${{ needs.generate-version.outputs.trunkver }}
+            type=raw,value=${{ needs.generate-version.outputs.version }}
             type=raw,value=latest
 
       - name: Build and push Docker image
@@ -133,7 +161,7 @@ jobs:
           context: .
           push: true
           build-args: |
-            VERSION=${{ needs.generate-version.outputs.trunkver }}
+            VERSION=${{ needs.generate-version.outputs.version }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
