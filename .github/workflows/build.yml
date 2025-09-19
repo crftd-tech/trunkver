@@ -130,14 +130,22 @@ jobs:
             make build sign "VERSION=${VERSION}"
           )
       - name: Create release
+        uses: softprops/action-gh-release@6cbd405e2c4e67a21c47fa9e383d020e4e28b836 # v2
+        with:
+          name: ${{ needs.generate-version.outputs.version }}
+          tag_name: ${{ needs.generate-version.outputs.version }}
+          draft: true
+          prerelease: ${{ needs.generate-version.outputs.prerelease }}
+          files: |
+            dist/*
+      - name: Finalize release
         id: release
         uses: softprops/action-gh-release@6cbd405e2c4e67a21c47fa9e383d020e4e28b836 # v2
         with:
           name: ${{ needs.generate-version.outputs.version }}
           tag_name: ${{ needs.generate-version.outputs.version }}
+          draft: false
           prerelease: ${{ needs.generate-version.outputs.prerelease }}
-          files: |
-            dist/*
       - name: Log in to the Container registry
         uses: docker/login-action@5b7b28b1cc417bbd34cd8c225a957c9ce9adf7f2
         with:
