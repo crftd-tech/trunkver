@@ -1,6 +1,6 @@
 module github.com/crftd-tech/trunkver
 
-go 1.25.0
+go 1.25.1
 
 require (
 	github.com/spf13/cobra v1.9.1
