@@ -42,7 +42,7 @@ jobs:
 
       - name: Generate trunkver
         id: trunkver
-        uses: crftd-tech/trunkver@ab47f5339878f5a7c0097e8f10e6eae13a0ba998 # v1.1.1
+        uses: crftd-tech/trunkver@d0490489c86c5475a3e271d97c05fa928e3a8cd1 # 1.1.2
         with:
           baseVersion: ${{ fromJson(steps.get_latest_release.outputs.data).tag_name }}
           prerelease: "true"
