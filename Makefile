@@ -73,19 +73,16 @@ dist/%.cosign.bundle: dist/%
 dist/%.sbom.json: dist/%
 	syft scan --output spdx-json=$@ file:$<
 
-
 dist/checksums.txt: $(addprefix dist/trunkver_, $(PLATFORMS))
 	cd dist; sha256sum $(subst dist/,,$^) | tee checksums.txt
 
 .PHONY: docker
 docker: 
-	for i in linux/arm64 linux/amd64; do \
-		docker buildx build \
-			--platform $$i \
-			-f Dockerfile \
-			-t ${IMAGE}:${VERSION} \
-			.; \
-	done
+	docker buildx build \
+		--platform linux/arm64,linux/amd64 \
+		-f Dockerfile \
+		-t ${IMAGE}:${VERSION} \
+		.
 
 ext/${SMOKE_BINARY}:
 	curl --location https://github.com/SamirTalwar/smoke/releases/download/v2.4.0/${SMOKE_BINARY} -o $@
