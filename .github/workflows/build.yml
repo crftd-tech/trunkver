@@ -167,6 +167,7 @@ jobs:
         id: docker-build
         with:
           context: .
+          platforms: linux/amd64,linux/arm64
           push: true
           build-args: |
             VERSION=${{ needs.generate-version.outputs.version }}
