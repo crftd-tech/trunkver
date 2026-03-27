@@ -140,7 +140,7 @@ jobs:
           files: |
             dist/*
       - name: Log in to the Container registry
-        uses: docker/login-action@28fdb31ff34708d19615a74d67103ddc2ea9725c
+        uses: docker/login-action@a0d57b8e43b6ef1cca20559d68cec2227e63fccd
         with:
           registry: "ghcr.io"
           username: ${{ github.actor }}
