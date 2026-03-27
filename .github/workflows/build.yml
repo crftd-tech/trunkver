@@ -16,11 +16,6 @@ on:
       - "README.md"
       - "website/**"
 
-permissions:
-  packages: write
-  contents: write
-  id-token: write
-  attestations: write
 
 jobs:
   generate-version:
@@ -89,6 +84,12 @@ jobs:
     runs-on: ubuntu-latest
     needs: [generate-version, test]
     if: github.ref == 'refs/heads/main'
+    permissions:
+      packages: write
+      contents: write
+      id-token: write
+      attestations: write
+      artifact-metadata: write
     outputs:
       imageid: ${{ steps.docker-build.outputs.imageid }}
       digest: ${{ steps.docker-build.outputs.digest }}
