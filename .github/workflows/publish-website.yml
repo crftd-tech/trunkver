@@ -31,7 +31,7 @@ jobs:
           cache-dependency-path: "./website/package-lock.json"
       - name: Generate trunkver
         id: trunkver
-        uses: crftd-tech/trunkver@main
+        uses: crftd-tech/trunkver@5d4761851d4286a4a724e20174264a2b9ce9f6c3 # main
       - name: Bump version in package.json
         run: npm pkg set "version=${{ steps.trunkver.outputs.trunkver }}"
 
