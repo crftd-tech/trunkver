@@ -1,6 +1,6 @@
 # Can't be scratch because we need sh and tee for the Github Action
 # so we can write the trunkver to GITHUB_OUTPUT
-FROM busybox:1.37.0-glibc@sha256:3bf024f5b91b256d55fcecaa910a7f671bdd2b6bb5bb22ac6b774cc4678f2093
+FROM busybox:1.38.0-glibc@sha256:3ba030337caebbfc2232b22b1e435eb213b28e5844a34942c74555bf904a265a
 
 ARG TARGETOS
 ARG TARGETARCH
